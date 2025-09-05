@@ -1,0 +1,1109 @@
+<?php
+//include("auth_check.php"); // protect page
+include("config.php");
+?>
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Add User</title>
+  <link rel="shortcut icon" type="image/png" href="assets/images/logos/favicon.png" />
+  <!-- Bootstrap CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Select2 CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/css/select2.min.css" rel="stylesheet" />
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <!-- DataTables CSS -->
+  <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+  <link href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.min.css" />
+  <style>
+    /* Main select box */
+    .modal-content {
+      border-radius: 12px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
+    }
+
+    /* Make Select2 look like Bootstrap form-control */
+    .select2-container .select2-selection--single {
+      height: 38px;
+      padding: 6px 12px;
+      border: 1px solid #ced4da;
+      border-radius: .375rem;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+      line-height: 24px;
+    }
+
+    /* Flag styling */
+    .flag-img {
+      width: 20px;
+      height: 15px;
+      margin-right: 8px;
+      object-fit: cover;
+      border: 1px solid #ccc;
+    }
+
+    .select2-results__option {
+      display: flex;
+      align-items: center;
+    }
+
+    .select2-results__option img {
+      margin-right: 8px;
+    }
+
+    .select2-selection__rendered {
+      display: flex !important;
+      align-items: center;
+    }
+
+    .select2-selection__rendered img {
+      margin-right: 8px;
+    }
+  </style>
+</head>
+
+<body>
+  <!--  Body Wrapper -->
+  <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+    data-sidebar-position="fixed" data-header-position="fixed">
+    <!-- Sidebar Start -->
+    <?php include("sidebar.php"); ?>
+    <!--  Sidebar End -->
+    <!--  Main wrapper -->
+    <div class="body-wrapper">
+      <!--  Header Start -->
+      <?php include("header.php"); ?>
+
+      <!--  Header End -->
+      <div class="container-fluid">
+        <!-- Top Bar -->
+        <?php if ($_SESSION['type'] == 'admin') { ?>
+
+          <div class="top-bar mb-3 d-flex justify-content-end">
+            <button class="btn btn-primary add-btn"><i class='fa fa-plus'></i> Add User</button>
+          </div>
+        <?php } ?>
+
+        <!--  Row 1 -->
+        <div class="table-responsive">
+          <table id="example" class="table table-striped table-bordered nowrap" style="width:100%">
+            <thead>
+              <tr>
+                <?php
+                if ($_SESSION['type'] == 'admin') { ?>
+                  <th>Action</th>
+                <?php } ?>
+                <th>Firstname</th>
+                <th>Lastname</th>
+                <th>Country</th>
+                <th>Mobile No</th>
+                <th>User ID</th>
+                <th>Password</th>
+                <th>Timezone</th>
+                <th>Email ID</th>
+                <th>Group ID</th>
+                <th>PBX No</th>
+                <th>Company Name</th>
+                <th>Designation</th>
+                <th>Address</th>
+                <th>City </th>
+                <th>State</th>
+                <th>Area Code</th>
+                <th>Residence Number</th>
+                <th>Profile</th>
+                <th>IP Phone No</th>
+                <th>Mobion</th>
+                <th>Mobiweb</th>
+              </tr>
+            </thead>
+            <tbody>
+
+              <?php
+              if ($_SESSION['type'] == 'admin') {
+                $sql = "SELECT * FROM public.subscriber_profile WHERE subscriber_id NOT IN ('admin') ORDER BY id ASC";
+              } else {
+                $sql = "SELECT * FROM public.subscriber_profile WHERE subscriber_id IN ('" . $_SESSION['subscriber_id'] . "') ORDER BY id ASC";
+              }
+              $res = pg_query($con, $sql);
+              if (pg_num_rows($res) > 0) {
+                while ($row = pg_fetch_array($res)) {
+              ?>
+                  <tr>
+                    <?php
+                    if ($_SESSION['type'] == 'admin') { ?>
+                      <td class="action-icons">
+                        <i class="fa-regular fa-edit text-primary me-3 editBtn" style="font-size:20px; cursor:pointer;" data-id="<?php echo $row['id']; ?>"
+                          data-firstname="<?php echo $row['first_name']; ?>"
+                          data-lastname="<?php echo $row['last_name']; ?>"
+                          data-email="<?php echo $row['email']; ?>"
+                          data-mobile="<?php echo $row['mobile_no']; ?>"
+                          data-country="<?php echo $row['country']; ?>"
+                          data-userid="<?php echo $row['subscriber_id']; ?>"
+                          data-password="<?php echo $row['subscriber_password']; ?>"
+                          data-timezone="<?php echo $row['timezone']; ?>"
+                          data-groupid="<?php echo $row['groupid']; ?>"
+                          data-pbx="<?php echo $row['pbx']; ?>"
+                          data-company="<?php echo $row['company_name']; ?>"
+                          data-designation="<?php echo $row['designation']; ?>"
+                          data-address="<?php echo $row['addr_1']; ?>"
+                          data-city="<?php echo $row['city']; ?>"
+                          data-state="<?php echo $row['state']; ?>"
+                          data-area="<?php echo $row['area_code']; ?>"
+                          data-residence="<?php echo $row['res_no']; ?>"
+                          data-profile="<?php echo $row['profile']; ?>"
+                          data-ipphone="<?php echo $row['ipphoneno']; ?>"
+                          data-mobion="<?php echo $row['mobion']; ?>"
+                          data-mobiweb="<?php echo $row['mobiweb']; ?>"></i>
+                        <i class="fa-regular fa-trash-alt text-danger deleteUser"
+                          style="font-size:20px; cursor:pointer;"
+                          data-id="<?php echo $row['id']; ?>"
+                          data-name="<?php echo $row['first_name']; ?>">
+                        </i>
+                      </td>
+                    <?php } ?>
+                    <td><?php echo $row['first_name']; ?></td>
+                    <td><?php echo $row['last_name']; ?></td>
+                    <td><?php echo $row['country']; ?></td>
+                    <td><?php echo $row['mobile_no']; ?></td>
+                    <td><?php echo $row['subscriber_id']; ?></td>
+                    <td><?php echo $row['subscriber_password']; ?></td>
+                    <td><?php echo $row['timezone']; ?></td>
+                    <td><?php echo $row['email']; ?></td>
+                    <td><?php echo $row['groupid']; ?></td>
+                    <td><?php echo $row['pbx']; ?></td>
+                    <td><?php echo $row['company_name']; ?></td>
+                    <td><?php echo $row['designation']; ?></td>
+                    <td><?php echo $row['addr_1']; ?></td>
+                    <td><?php echo $row['city']; ?></td>
+                    <td><?php echo $row['state']; ?></td>
+                    <td><?php echo $row['area_code']; ?></td>
+                    <td><?php echo $row['res_no']; ?></td>
+                    <td><?php echo $row['profile']; ?></td>
+                    <td><?php echo $row['ipphoneno']; ?></td>
+                    <td><?php echo $row['mobion']; ?></td>
+                    <td><?php echo $row['mobiweb']; ?></td>
+                  </tr>
+
+
+              <?php
+                }
+              }
+
+
+              ?>
+
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ADD Modal -->
+  <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl"> <!-- Extra large modal -->
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <h5 class="modal-title" id="addUserLabel">Add User</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body">
+          <form id="addUserForm">
+            <div class="row g-3">
+
+              <!-- First Column -->
+              <div class="col-md-3">
+                <label for="addfirstName" class="form-label">First Name <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="addfirstName" name="addfirstName" placeholder="Firstname"
+                  required>
+              </div>
+
+              <div class="col-md-3">
+                <label for="addlastName" class="form-label">Last Name <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="addlastName" name="addlastName" placeholder="Lastname" required>
+              </div>
+
+              <div class="col-md-3">
+                <label for="addemail" class="form-label">Email</label>
+                <input type="email" class="form-control" id="addemail" name="addemail" placeholder="Email">
+              </div>
+
+              <div class="col-md-3">
+                <label for="addmobileNo" class="form-label">Mobile No <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="addmobileNo" name="addmobileNo" placeholder="MobileNo" required>
+              </div>
+
+              <div class="col-md-3">
+                <label for="addcountry" class="form-label">Country <span class="text-danger">*</span></label>
+                <select id="addcountry" name="addcountry" class="form-select" style="width: 100%;" required>
+                  <option value="">--Select country--</option>
+                </select>
+              </div>
+
+              <input type="hidden" id="addcountrycode" />
+
+              <div class="col-md-3">
+                <label for="adduserId" class="form-label">User ID <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="adduserId" name="adduserId" placeholder="UserId" required>
+              </div>
+
+              <div class="col-md-3">
+                <label for="addpassword" class="form-label">Password <span class="text-danger">*</span></label>
+                <input type="password" class="form-control" id="addpassword" name="addpassword" placeholder="Password"
+                  required>
+              </div>
+
+              <div class="col-md-3">
+                <label for="addtimezone" class="form-label">Timezone <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="addtimezone" name="addtimezone" placeholder="Timezone" required>
+              </div>
+
+              <div class="col-md-3">
+                <label for="addgroupId" class="form-label">Group ID</label>
+                <input type="text" class="form-control" id="addgroupId" name="addgroupId" placeholder="GroupID">
+              </div>
+
+              <div class="col-md-3">
+                <label for="addpbxNo" class="form-label">PBX Info</label>
+                <input type="text" class="form-control" id="addpbxNo" name="addpbxNo" placeholder="PBX Info">
+              </div>
+
+              <div class="col-md-3">
+                <label for="addcompanyName" class="form-label">Company Name</label>
+                <input type="text" class="form-control" id="addcompanyName" name="addcompanyName" placeholder="CompanyName">
+              </div>
+
+              <div class="col-md-3">
+                <label for="adddesignation" class="form-label">Designation</label>
+                <input type="text" class="form-control" id="adddesignation" name="adddesignation" placeholder="Designation">
+              </div>
+
+              <div class="col-md-3">
+                <label for="addaddress" class="form-label">Address</label>
+                <input type="text" class="form-control" id="addaddress" name="addaddress" placeholder="Address">
+              </div>
+
+              <div class="col-md-3">
+                <label for="addcity" class="form-label">City <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="addcity" name="addcity" placeholder="City" required>
+              </div>
+
+              <div class="col-md-3">
+                <label for="addstate" class="form-label">State</label>
+                <input type="text" class="form-control" id="addstate" name="addstate" placeholder="State">
+              </div>
+
+              <div class="col-md-3">
+                <label for="addareaCode" class="form-label">Area Code</label>
+                <input type="text" class="form-control" id="addareaCode" name="addareaCode" placeholder="AreaCode">
+              </div>
+
+              <div class="col-md-3">
+                <label for="addresidenceNumber" class="form-label">Residence Number</label>
+                <input type="text" class="form-control" id="addresidenceNumber" name="addresidenceNumber"
+                  placeholder="Residencenumber">
+              </div>
+
+              <div class="col-md-3">
+                <label for="addextensionNo" class="form-label">Extension No</label>
+                <input type="text" class="form-control" id="addextensionNo" name="addextensionNo" placeholder="ExtensionNo">
+              </div>
+
+              <div class="col-md-3">
+                <label for="addprofile" class="form-label">Profile</label>
+                <select id="addprofile" name="addprofile" class="form-select">
+                  <option value="user">User</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </div>
+
+
+              <div class="col-md-3">
+                <label for="addipPhoneNo" class="form-label">IP Phone No</label>
+                <input type="text" class="form-control" id="addipPhoneNo" name="addipPhoneNo" placeholder="IPPhoneNo">
+              </div>
+
+              <div class="col-md-3">
+                <label for="addmobion" class="form-label">Mobion</label>
+                <input type="text" class="form-control" id="addmobion" name="addmobion" placeholder="Mobion">
+              </div>
+
+              <div class="col-md-3">
+                <label for="addmobiweb" class="form-label">Mobiweb</label>
+                <input type="text" class="form-control" id="addmobiweb" name="addmobiweb" placeholder="Mobiweb">
+              </div>
+
+            </div>
+          </form>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" id="submitAddUser">Add</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Edit Modal -->
+  <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editModalLabel">Edit User</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="editForm">
+            <div class="row g-3">
+
+              <!-- First Column -->
+              <div class="col-md-3">
+                <label for="editfirstName" class="form-label">First Name <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="editfirstName" name="editfirstName" placeholder="Firstname"
+                  required>
+              </div>
+
+              <div class="col-md-3">
+                <label for="editlastName" class="form-label">Last Name <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="editlastName" name="editlastName" placeholder="Lastname" required>
+              </div>
+
+              <div class="col-md-3">
+                <label for="editemail" class="form-label">Email</label>
+                <input type="email" class="form-control" id="editemail" name="editemail" placeholder="Email">
+              </div>
+
+              <div class="col-md-3">
+                <label for="editmobileNo" class="form-label">Mobile No <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="editmobileNo" name="editmobileNo" placeholder="MobileNo" required>
+              </div>
+
+              <div class="col-md-3">
+                <label for="editcountry" class="form-label">Country <span class="text-danger">*</span></label>
+                <select id="editcountry" name="editcountry" class="form-select" style="width: 100%;" required>
+                  <option value="">--Select country--</option>
+                </select>
+              </div>
+              <input type="hidden" id="editcountrycode" />
+
+              <div class="col-md-3">
+                <label for="edituserId" class="form-label">User ID <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="edituserId" name="edituserId" placeholder="UserId" required>
+              </div>
+
+              <div class="col-md-3">
+                <label for="editpassword" class="form-label">Password <span class="text-danger">*</span></label>
+                <input type="password" class="form-control" id="editpassword" name="editpassword" placeholder="Password"
+                  required>
+              </div>
+
+              <div class="col-md-3">
+                <label for="edittimezone" class="form-label">Timezone <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="edittimezone" name="edittimezone" placeholder="Timezone" required>
+              </div>
+
+              <div class="col-md-3">
+                <label for="editgroupId" class="form-label">Group ID</label>
+                <input type="text" class="form-control" id="editgroupId" name="editgroupId" placeholder="GroupID">
+              </div>
+
+              <div class="col-md-3">
+                <label for="editpbxNo" class="form-label">PBX No</label>
+                <input type="text" class="form-control" id="editpbxNo" name="editpbxNo" placeholder="PBXNo">
+              </div>
+
+              <div class="col-md-3">
+                <label for="editcompanyName" class="form-label">Company Name</label>
+                <input type="text" class="form-control" id="editcompanyName" name="editcompanyName" placeholder="CompanyName">
+              </div>
+
+              <div class="col-md-3">
+                <label for="editdesignation" class="form-label">Designation</label>
+                <input type="text" class="form-control" id="editdesignation" name="editdesignation" placeholder="Designation">
+              </div>
+
+              <div class="col-md-3">
+                <label for="editaddress" class="form-label">Address</label>
+                <input type="text" class="form-control" id="editaddress" name="editaddress" placeholder="Address">
+              </div>
+
+              <div class="col-md-3">
+                <label for="editcity" class="form-label">City <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="editcity" name="editcity" placeholder="City" required>
+              </div>
+
+              <div class="col-md-3">
+                <label for="editstate" class="form-label">State</label>
+                <input type="text" class="form-control" id="editstate" name="editstate" placeholder="State">
+              </div>
+
+              <div class="col-md-3">
+                <label for="editareaCode" class="form-label">Area Code</label>
+                <input type="text" class="form-control" id="editareaCode" name="editareaCode" placeholder="AreaCode">
+              </div>
+
+              <div class="col-md-3">
+                <label for="editresidenceNumber" class="form-label">Residence Number</label>
+                <input type="text" class="form-control" id="editresidenceNumber" name="editresidenceNumber"
+                  placeholder="Residencenumber">
+              </div>
+
+              <div class="col-md-3">
+                <label for="editextensionNo" class="form-label">Extension No</label>
+                <input type="text" class="form-control" id="editextensionNo" name="editextensionNo" placeholder="ExtensionNo">
+              </div>
+
+              <div class="col-md-3">
+                <label for="editprofile" class="form-label">Profile</label>
+                <select id="editprofile" name="editprofile" class="form-select">
+                  <option value="user">User</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </div>
+
+              <div class="col-md-3">
+                <label for="editipPhoneNo" class="form-label">IP Phone No</label>
+                <input type="text" class="form-control" id="editipPhoneNo" name="editipPhoneNo" placeholder="IPPhoneNo">
+              </div>
+
+              <div class="col-md-3">
+                <label for="editmobion" class="form-label">Mobion</label>
+                <input type="text" class="form-control" id="editmobion" name="editmobion" placeholder="Mobion">
+              </div>
+
+              <div class="col-md-3">
+                <label for="editmobiweb" class="form-label">Mobiweb</label>
+                <input type="text" class="form-control" id="editmobiweb" name="editmobiweb" placeholder="Mobiweb">
+              </div>
+            </div>
+            <!-- Add more fields as needed -->
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary" id="saveEdit">Save Changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Delete User</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to delete <span id="deleteUserName"></span>?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-danger" id="confirmDelete">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="assets/libs/jquery/dist/jquery.min.js"></script>
+  <script src="assets/js/sidebarmenu.js"></script>
+  <script src="assets/js/app.min.js"></script>
+
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Select2 JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/js/select2.min.js"></script>
+
+
+  <!-- DataTables JS -->
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+  <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+  <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
+
+
+  <!-- Custom JS -->
+  <script>
+    $(document).ready(function() {
+      let rowToEdit;
+
+      $('.add-btn').on('click', function() {
+        let addModal = new bootstrap.Modal(document.getElementById('addUserModal'));
+        addModal.show();
+      });
+
+
+      // Initialize DataTable
+      $('#example').DataTable({
+        responsive: true,
+        pageLength: 10,
+        lengthMenu: [5, 10, 25, 50],
+        buttons: [{
+            extend: 'excelHtml5',
+            className: 'btn btn-success'
+          },
+          {
+            extend: 'pdfHtml5',
+            className: 'btn btn-danger'
+          },
+          {
+            extend: 'print',
+            className: 'btn btn-secondary'
+          }
+        ]
+      });
+
+      // Edit icon click (only inside table)
+      $('#example').on('click', 'td.action-icons .fa-edit', function() {
+        let editModal = new bootstrap.Modal(document.getElementById('editModal'));
+        editModal.show();
+      });
+
+
+
+
+
+      // Open modal when trash icon clicked
+      let rowToDelete = null;
+      let deleteUserId = null;
+      $('#example').on('click', '.deleteUser', function() {
+        rowToDelete = $(this).closest('tr');
+        deleteUserId = $(this).data('id'); // user id from DB
+        let userName = $(this).data('name'); // first name
+        $('#deleteUserName').text(userName);
+
+        let deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+        deleteModal.show();
+      });
+
+      // Confirm delete
+      $('#confirmDelete').on('click', function() {
+        if (deleteUserId) {
+          $.ajax({
+            url: 'delete_user.php',
+            type: 'POST',
+            data: {
+              id: deleteUserId
+            },
+            success: function(response) {
+              if (response.trim() === "success") {
+                location.reload();
+              } else {
+                alert("❌ Error deleting user!");
+              }
+            },
+            error: function() {
+              alert("❌ Server error!");
+            }
+          });
+        }
+
+        // Close modal
+        let modalEl = document.getElementById('deleteModal');
+        let modal = bootstrap.Modal.getInstance(modalEl);
+        modal.hide();
+      });
+
+
+
+      $("#submitAddUser").on("click", function() {
+        let form = $("#addUserForm")[0];
+
+        if (!form.checkValidity()) {
+          form.reportValidity(); // Show native HTML5 errors
+          return;
+        }
+
+        let formData = $("#addUserForm").serialize();
+
+        $.ajax({
+          url: "add_userquery.php",
+          type: "POST",
+          data: formData,
+          success: function(response) {
+
+            console.log(response);
+            alert(response);
+            location.reload();
+
+          },
+          error: function() {
+            alert(" ❌ Error adding user. Try again");
+          }
+        });
+      });
+
+    });
+  </script>
+
+  <script>
+    // let timer;
+
+    // function resetTimer() {
+    //   clearTimeout(timer);
+    //   timer = setTimeout(() => {
+    //     window.location.href = "logout.php";
+    //   }, 30000); // 30 sec
+    // }
+
+    // Reset timer on user activity
+    window.onload = resetTimer;
+    document.onmousemove = resetTimer;
+    document.onkeypress = resetTimer;
+    document.onclick = resetTimer;
+  </script>
+  <!-- Stop caching so a cached copy can't appear via Back -->
+  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+
+  <script>
+    (function() {
+      // Push two states so the first Back press stays on the page
+      const push = () => history.pushState({
+        trap: true
+      }, "", location.href);
+      push(); // state #1
+      push(); // state #2
+
+      // Whenever the user tries Back/Forward, immediately re-push a state
+      window.addEventListener("popstate", function(e) {
+        push();
+      });
+
+      // If the page was restored from the back/forward cache, force a reload
+      window.addEventListener("pageshow", function(e) {
+        const nav = (performance.getEntriesByType && performance.getEntriesByType("navigation")[0]) || {};
+        if (e.persisted || nav.type === "back_forward") {
+          location.reload(); // with no-store headers, this won’t show a stale page
+        }
+      });
+
+      // OPTIONAL: uncomment to show a native “Leave site?” confirm on any navigation
+      // window.addEventListener("beforeunload", function (e) {
+      //   e.preventDefault();
+      //   e.returnValue = "";
+      // });
+    })();
+  </script>
+
+
+  <script>
+    const countries = [{
+        name: "India",
+        code: "+91",
+        timezone: "UTC+05:30",
+        flag: "https://flagcdn.com/in.svg"
+      },
+      {
+        name: "United States",
+        code: "+1",
+        timezone: "UTC−05:00",
+        flag: "https://flagcdn.com/us.svg"
+      },
+      {
+        name: "United Kingdom",
+        code: "+44",
+        timezone: "UTC+00:00",
+        flag: "https://flagcdn.com/gb.svg"
+      },
+      {
+        name: "Australia",
+        code: "+61",
+        timezone: "UTC+10:00",
+        flag: "https://flagcdn.com/au.svg"
+      },
+      {
+        name: "Canada",
+        code: "+1",
+        timezone: "UTC−05:00",
+        flag: "https://flagcdn.com/ca.svg"
+      },
+      {
+        name: "Germany",
+        code: "+49",
+        timezone: "UTC+01:00",
+        flag: "https://flagcdn.com/de.svg"
+      },
+      {
+        name: "France",
+        code: "+33",
+        timezone: "UTC+01:00",
+        flag: "https://flagcdn.com/fr.svg"
+      },
+      {
+        name: "Brazil",
+        code: "+55",
+        timezone: "UTC−03:00",
+        flag: "https://flagcdn.com/br.svg"
+      },
+      {
+        name: "Japan",
+        code: "+81",
+        timezone: "UTC+09:00",
+        flag: "https://flagcdn.com/jp.svg"
+      },
+      {
+        name: "China",
+        code: "+86",
+        timezone: "UTC+08:00",
+        flag: "https://flagcdn.com/cn.svg"
+      },
+      {
+        name: "Russia",
+        code: "+7",
+        timezone: "UTC+03:00 to UTC+12:00",
+        flag: "https://flagcdn.com/ru.svg"
+      },
+      {
+        name: "South Africa",
+        code: "+27",
+        timezone: "UTC+02:00",
+        flag: "https://flagcdn.com/za.svg"
+      },
+      {
+        name: "Mexico",
+        code: "+52",
+        timezone: "UTC−06:00",
+        flag: "https://flagcdn.com/mx.svg"
+      },
+      {
+        name: "Italy",
+        code: "+39",
+        timezone: "UTC+01:00",
+        flag: "https://flagcdn.com/it.svg"
+      },
+      {
+        name: "Spain",
+        code: "+34",
+        timezone: "UTC+01:00",
+        flag: "https://flagcdn.com/es.svg"
+      },
+      {
+        name: "Netherlands",
+        code: "+31",
+        timezone: "UTC+01:00",
+        flag: "https://flagcdn.com/nl.svg"
+      },
+      {
+        name: "Sweden",
+        code: "+46",
+        timezone: "UTC+01:00",
+        flag: "https://flagcdn.com/se.svg"
+      },
+      {
+        name: "Norway",
+        code: "+47",
+        timezone: "UTC+01:00",
+        flag: "https://flagcdn.com/no.svg"
+      },
+      {
+        name: "Denmark",
+        code: "+45",
+        timezone: "UTC+01:00",
+        flag: "https://flagcdn.com/dk.svg"
+      },
+      {
+        name: "Switzerland",
+        code: "+41",
+        timezone: "UTC+01:00",
+        flag: "https://flagcdn.com/ch.svg"
+      },
+      {
+        name: "Belgium",
+        code: "+32",
+        timezone: "UTC+01:00",
+        flag: "https://flagcdn.com/be.svg"
+      },
+      {
+        name: "Austria",
+        code: "+43",
+        timezone: "UTC+01:00",
+        flag: "https://flagcdn.com/at.svg"
+      },
+      {
+        name: "Ireland",
+        code: "+353",
+        timezone: "UTC+00:00",
+        flag: "https://flagcdn.com/ie.svg"
+      },
+      {
+        name: "New Zealand",
+        code: "+64",
+        timezone: "UTC+12:00",
+        flag: "https://flagcdn.com/nz.svg"
+      },
+      {
+        name: "Singapore",
+        code: "+65",
+        timezone: "UTC+08:00",
+        flag: "https://flagcdn.com/sg.svg"
+      },
+      {
+        name: "Malaysia",
+        code: "+60",
+        timezone: "UTC+08:00",
+        flag: "https://flagcdn.com/my.svg"
+      },
+      {
+        name: "Thailand",
+        code: "+66",
+        timezone: "UTC+07:00",
+        flag: "https://flagcdn.com/th.svg"
+      },
+      {
+        name: "Indonesia",
+        code: "+62",
+        timezone: "UTC+07:00 to UTC+09:00",
+        flag: "https://flagcdn.com/id.svg"
+      },
+      {
+        name: "Philippines",
+        code: "+63",
+        timezone: "UTC+08:00",
+        flag: "https://flagcdn.com/ph.svg"
+      },
+      {
+        name: "Pakistan",
+        code: "+92",
+        timezone: "UTC+05:00",
+        flag: "https://flagcdn.com/pk.svg"
+      },
+      {
+        name: "Bangladesh",
+        code: "+880",
+        timezone: "UTC+06:00",
+        flag: "https://flagcdn.com/bd.svg"
+      },
+      {
+        name: "Sri Lanka",
+        code: "+94",
+        timezone: "UTC+05:30",
+        flag: "https://flagcdn.com/lk.svg"
+      },
+      {
+        name: "Nepal",
+        code: "+977",
+        timezone: "UTC+05:45",
+        flag: "https://flagcdn.com/np.svg"
+      },
+      {
+        name: "Afghanistan",
+        code: "+93",
+        timezone: "UTC+04:30",
+        flag: "https://flagcdn.com/af.svg"
+      },
+      {
+        name: "Iran",
+        code: "+98",
+        timezone: "UTC+03:30",
+        flag: "https://flagcdn.com/ir.svg"
+      },
+      {
+        name: "Turkey",
+        code: "+90",
+        timezone: "UTC+03:00",
+        flag: "https://flagcdn.com/tr.svg"
+      },
+      {
+        name: "Saudi Arabia",
+        code: "+966",
+        timezone: "UTC+03:00",
+        flag: "https://flagcdn.com/sa.svg"
+      },
+      {
+        name: "United Arab Emirates",
+        code: "+971",
+        timezone: "UTC+04:00",
+        flag: "https://flagcdn.com/ae.svg"
+      },
+      {
+        name: "Israel",
+        code: "+972",
+        timezone: "UTC+02:00",
+        flag: "https://flagcdn.com/il.svg"
+      },
+      {
+        name: "Egypt",
+        code: "+20",
+        timezone: "UTC+02:00",
+        flag: "https://flagcdn.com/eg.svg"
+      },
+      {
+        name: "Nigeria",
+        code: "+234",
+        timezone: "UTC+01:00",
+        flag: "https://flagcdn.com/ng.svg"
+      },
+      {
+        name: "Kenya",
+        code: "+254",
+        timezone: "UTC+03:00",
+        flag: "https://flagcdn.com/ke.svg"
+      },
+      {
+        name: "Argentina",
+        code: "+54",
+        timezone: "UTC−03:00",
+        flag: "https://flagcdn.com/ar.svg"
+      }
+    ];
+
+    // Format for dropdown list
+    function formatCountry(country) {
+      if (!country.id) return country.text; // For placeholder
+      const data = countries.find(c => c.name === country.text);
+      if (!data) return country.text;
+
+      return $(`<span><img class="flag-img" src="${data.flag}"/> ${data.name} (${data.code})</span>`);
+    }
+
+    // Format for selected item (simplified to avoid rendering issues)
+    function formatCountrySelection(country) {
+      if (!country.id) return country.text;
+      const data = countries.find(c => c.name === country.text);
+      if (!data) return country.text;
+
+      return $(`<span><img class="flag-img" src="${data.flag}"/> ${data.name}</span>`);
+    }
+
+    // Add User Modal
+    $('#addUserModal #addcountry').select2({
+      dropdownParent: $('#addUserModal'),
+      data: countries.map(c => ({
+        id: c.name,
+        text: c.name,
+
+      })), // load from array
+      templateResult: formatCountry,
+      templateSelection: formatCountrySelection,
+      placeholder: "--Select country--",
+      allowClear: true,
+    });
+
+    // Edit User Modal
+    $('#editModal #editcountry').select2({
+      dropdownParent: $('#editModal'),
+      data: countries.map(c => ({
+        id: c.name,
+        text: c.name
+      })), // load from array
+      templateResult: formatCountry,
+      templateSelection: formatCountrySelection,
+      placeholder: "--Select country--",
+      allowClear: true
+    });
+
+    $('#addcountry').on('change', function() {
+      const selectedName = $(this).val();
+      const country = countries.find(c => c.name === selectedName);
+      if (country) {
+        $('#addtimezone').val(country.timezone);
+        $('#addcountrycode').val(country.code);
+
+
+      } else {
+        $('#addtimezone').val('');
+        $('#addcountrycode').val('');
+
+      }
+    });
+
+    $('#editcountry').on('change', function() {
+      const selectedName = $(this).val();
+      const country = countries.find(c => c.name === selectedName);
+      if (country) {
+        $('#edittimezone').val(country.timezone);
+        $('#editcountrycode').val(country.code);
+
+
+      } else {
+        $('#edittimezone').val('');
+        $('#editcountrycode').val('');
+
+      }
+    });
+  </script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const editButtons = document.querySelectorAll(".editBtn");
+
+      editButtons.forEach(btn => {
+        btn.addEventListener("click", function() {
+          // Normal fields
+          document.getElementById("editfirstName").value = this.dataset.firstname;
+          document.getElementById("editlastName").value = this.dataset.lastname;
+          document.getElementById("editemail").value = this.dataset.email;
+          document.getElementById("editmobileNo").value = this.dataset.mobile;
+          document.getElementById("edituserId").value = this.dataset.userid;
+          document.getElementById("editpassword").value = this.dataset.password;
+          document.getElementById("edittimezone").value = this.dataset.timezone;
+          document.getElementById("editgroupId").value = this.dataset.groupid;
+          document.getElementById("editpbxNo").value = this.dataset.pbx;
+          document.getElementById("editcompanyName").value = this.dataset.company;
+          document.getElementById("editdesignation").value = this.dataset.designation;
+          document.getElementById("editaddress").value = this.dataset.address;
+          document.getElementById("editcity").value = this.dataset.city;
+          document.getElementById("editstate").value = this.dataset.state;
+          document.getElementById("editareaCode").value = this.dataset.area;
+          document.getElementById("editresidenceNumber").value = this.dataset.residence;
+          document.getElementById("editprofile").value = this.dataset.profile;
+          document.getElementById("editipPhoneNo").value = this.dataset.ipphone;
+          document.getElementById("editmobion").value = this.dataset.mobion;
+          document.getElementById("editmobiweb").value = this.dataset.mobiweb;
+
+          // ✅ Country (Select2 fix)
+          $('#editcountry').val(this.dataset.country).trigger("change");
+
+          // Hidden ID
+          if (!document.getElementById("editId")) {
+            let hiddenId = document.createElement("input");
+            hiddenId.type = "hidden";
+            hiddenId.id = "editId";
+            hiddenId.name = "editId";
+            document.getElementById("editForm").appendChild(hiddenId);
+          }
+          document.getElementById("editId").value = this.dataset.id;
+        });
+      });
+    });
+
+
+    document.getElementById("saveEdit").addEventListener("click", function() {
+      const form = document.getElementById("editForm");
+      const formData = new FormData(form);
+
+      fetch("update_userquery.php", {
+          method: "POST",
+          body: formData
+        })
+        .then(res => res.text())
+        .then(data => {
+          alert(data); // Show response from server
+          location.reload(); // Reload table after update
+        })
+        .catch(err => console.error(err));
+    });
+  </script>
+
+
+</body>
+
+</html>

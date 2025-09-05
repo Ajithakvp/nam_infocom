@@ -1,0 +1,230 @@
+<?php include("config.php"); ?>
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Port Settings</title>
+    <link rel="shortcut icon" type="image/png" href="assets/images/logos/favicon.png" />
+
+    <!-- Bootstrap CSS -->
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+
+    <!-- DataTables CSS -->
+    <link href="assets/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <link href="assets/css/responsive.bootstrap5.min.css" rel="stylesheet">
+
+
+    <link rel="stylesheet" href="assets/css/styles.min.css" />
+</head>
+
+<body>
+    <!--  Body Wrapper -->
+    <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+        data-sidebar-position="fixed" data-header-position="fixed">
+        <!-- Sidebar Start -->
+        <?php include("sidebar.php"); ?>
+        <!--  Sidebar End -->
+        <!--  Main wrapper -->
+        <div class="body-wrapper">
+            <!--  Header Start -->
+            <?php include("header.php"); ?>
+
+            <!--  Header End -->
+            <div class="container-fluid">
+                <!--  Row 1 -->
+
+                <!--  Row 1 -->
+                <div class="table-responsive">
+                    <table id="example" class="table table-striped table-bordered nowrap" style="width:100%">
+                        <thead>
+                            <tr>
+
+                                <th>Port Name</th>
+                                <th>Port Number</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php $sql = "SELECT * FROM public.port_setting ORDER BY id ASC ";
+                            $res = pg_query($con, $sql);
+                            if (pg_num_rows($res) > 0) {
+                                while ($row = pg_fetch_array($res)) {
+                            ?>
+
+                                    <tr>
+
+                                        <td><?php echo $row['portname']; ?></td>
+                                        <td><?php echo $row['portnumber'] ?></td>
+                                        <td class="action-icons">
+                                            <i class="fa-regular fa-edit text-primary me-3" data-id="<?php echo $row['id']; ?>"
+                                                style="font-size:20px; cursor:pointer;"></i>
+
+                                        </td>
+                                    </tr>
+                            <?php
+                                }
+                            } ?>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Update Port Setting</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editForm">
+                        <div class="mb-3">
+                            <label for="editFirstname" class="form-label">Port Name</label>
+                            <input type="text" class="form-control" id="editFirstname" disabled>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editLastname" class="form-label">Port Number</label>
+                            <input type="text" class="form-control" id="editLastname">
+                            <span id="editLastnameError" style="color:red;display:none;font-size:14px;"></span>
+
+                        </div>
+
+                        <input type="hidden" id="port_id">
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveEdit">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/libs/jquery/dist/jquery.min.js"></script>
+    <script src="assets/js/sidebarmenu.js"></script>
+    <script src="assets/js/app.min.js"></script>
+
+
+
+    <!-- Bootstrap JS -->
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+
+    <!-- DataTables JS -->
+    <script src="assets/js/jquery.dataTables.min.js"></script>
+    <script src="assets/js/dataTables.bootstrap5.min.js"></script>
+    <script src="assets/js/dataTables.responsive.min.js"></script>
+    <script src="assets/js/responsive.bootstrap5.min.js"></script>
+
+
+    <!-- Custom JS -->
+    <script>
+        $(document).ready(function() {
+
+
+            $("#editLastname").on("input", function() {
+                // Allow only digits and dot
+                let original = this.value;
+                // this.value = this.value.replace(/[^0-9.]/g, "");
+                this.value = this.value.replace(/[^0-9]/g, "");
+
+
+                let $field = $(this);
+                let id = this.id;
+
+                if (this.value !== original) {
+                    // Show error if any non-numeric or non-dot was removed
+                    $("#" + id + "Error").text("Please enter only numeric values.").show();
+                    $field.css("border-color", "red");
+                } else {
+                    // Hide error when valid
+                    $("#" + id + "Error").hide();
+                    $field.css("border-color", "green");
+                }
+            });
+
+
+            // Initialize DataTable
+            $('#example').DataTable({
+                responsive: true,
+                pageLength: 10,
+                lengthMenu: [5, 10, 25, 50],
+            });
+
+            $('#example').on('click', 'td.action-icons .fa-edit', function() {
+                let id = $(this).data('id');
+                console.log("Clicked ID:", id);
+                rowToEdit = $(this).closest('tr');
+                $('#editFirstname').val(rowToEdit.find('td:eq(0)').text());
+                $('#editLastname').val(rowToEdit.find('td:eq(1)').text());
+                $('#port_id').val(id);
+
+
+                let editModal = new bootstrap.Modal(document.getElementById('editModal'));
+                editModal.show();
+            });
+
+            $('#saveEdit').on('click', function() {
+                var portname = $('#editFirstname').val().trim();
+                var portno = $('#editLastname').val().trim();
+                var port_id = $('#port_id').val();
+
+                // ✅ Validation
+                if (portname === "") {
+                    alert("⚠️ Please enter Port Name");
+                    $('#editFirstname').focus();
+                    return;
+                }
+                if (portno === "") {
+                    alert("⚠️ Please enter Port Number");
+                    $('#editLastname').focus();
+                    return;
+                }
+                if (port_id === "" || port_id === undefined) {
+                    alert("⚠️ Invalid record ID");
+                    return;
+                }
+
+                // ✅ AJAX request
+                $.ajax({
+                    url: "update_port.php",
+                    type: "POST",
+                    data: {
+                        port_id: port_id,
+                        portname: portname,
+                        portno: portno
+                    },
+                    success: function(response) {
+                        // handle server response
+                        if (response.trim() == "No changes made") {
+                            alert(response);
+                            location.reload();
+
+                        } else {
+                            alert("✅ Updated Successfully: " + response);
+                            // you can also close modal or reload table here
+                            $('#editModal').modal('hide');
+                            location.reload();
+                        }
+
+                    },
+                    error: function() {
+                        alert("❌ Error while updating data.");
+                    }
+                });
+            });
+
+        });
+    </script>
+</body>
+
+</html>
