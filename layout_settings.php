@@ -1,4 +1,7 @@
-<?php include("config.php"); ?>
+<?php include("config.php");
+include("chksession.php");
+include("check_table.php");
+$ctbl = tablecheck($con, "conference_layouts"); ?>
 <!doctype html>
 <html lang="en">
 
@@ -35,49 +38,53 @@
 
             <!--  Header End -->
             <div class="container-fluid">
-                <div class="d-flex justify-content-center align-items-center gap-3 mb-4">
-                    <!-- Dropdown -->
-                    <select id="screenLayoutid" class="form-select w-auto">
-                        <option value="" disabled selected hidden>Select Option</option>
-                        <?php $sql = "SELECT * FROM public.conference_layouts ORDER BY id ASC";
-                        $res = pg_query($con, $sql);
-                        if (pg_num_rows($res) > 0) {
-                            while ($row = pg_fetch_array($res)) {
-                        ?>
-                                <option value="<?php echo $row['layoutname'] ?>"><?php echo $row['layoutname']; ?></option>
+                <?php if ($ctbl) { ?>
 
-                        <?php
-
-                            }
-                        } ?>
-
-                    </select>
-
-                    <!-- Buttons -->
-                    <button class="btn btn-primary btn-update">Update</button>
-                    <button class="btn btn-danger btn-cancel">Cancel</button>
-                </div>
-
-                <div class="table-responsive">
-                    <table class="table table-bordered text-center mt-4">
-                        <thead>
-                            <tr>
-                                <th style=" background-color:#D3D3D3;font-weight: bold;text-transform: uppercase;">Screen Layout</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            $sql = "SELECT * FROM public.layout_setting ORDER BY id ASC";
+                    <div class="d-flex justify-content-center align-items-center gap-3 mb-4">
+                        <!-- Dropdown -->
+                        <select id="screenLayoutid" class="form-select w-auto">
+                            <option value="" disabled selected hidden>Select Option</option>
+                            <?php $sql = "SELECT * FROM public.conference_layouts ORDER BY id ASC";
                             $res = pg_query($con, $sql);
                             if (pg_num_rows($res) > 0) {
-                                $row = pg_fetch_array($res);
-                                echo "<tr><td>" . $row['layoutnumber'] . "</td></tr>";
-                            }
+                                while ($row = pg_fetch_array($res)) {
                             ?>
-                        </tbody>
-                    </table>
-                </div>
+                                    <option value="<?php echo $row['layoutname'] ?>"><?php echo $row['layoutname']; ?></option>
 
+                            <?php
+
+                                }
+                            } ?>
+
+                        </select>
+
+                        <!-- Buttons -->
+                        <button class="btn btn-primary btn-update">Update</button>
+                        <button class="btn btn-danger btn-cancel">Cancel</button>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered text-center mt-4">
+                            <thead>
+                                <tr>
+                                    <th style=" background-color:#D3D3D3;font-weight: bold;text-transform: uppercase;">Screen Layout</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $sql = "SELECT * FROM public.layout_setting ORDER BY id ASC";
+                                $res = pg_query($con, $sql);
+                                if (pg_num_rows($res) > 0) {
+                                    $row = pg_fetch_array($res);
+                                    echo "<tr><td>" . $row['layoutnumber'] . "</td></tr>";
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php } else {
+                    echo $msg;
+                } ?>
             </div>
         </div>
     </div>

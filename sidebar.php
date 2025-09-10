@@ -1,5 +1,3 @@
-<?php include("chksession.php");
-?>
 <aside class="left-sidebar">
   <!-- Sidebar scroll-->
   <div>
@@ -34,18 +32,15 @@
         </li>
 
         <?php if ($_SESSION['type'] == 'admin') { ?>
-
           <li class="sidebar-item">
             <a class="sidebar-link" href="subscribes_id.php">
               <span><i class="ti ti-id-badge-2"></i></span>
               <span class="hide-menu">Subscribes ID</span>
             </a>
           </li>
-
         <?php } ?>
 
         <?php if ($_SESSION['type'] == 'admin') { ?>
-
           <li class="nav-small-cap">
             <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
             <span class="hide-menu">SETTINGS</span>
@@ -75,7 +70,6 @@
               <span class="hide-menu">Group Settings</span>
             </a>
           </li>
-
         <?php } ?>
 
         <li class="nav-small-cap">
@@ -90,7 +84,6 @@
         </li>
 
         <?php if ($_SESSION['type'] == 'admin') { ?>
-
           <li class="nav-small-cap">
             <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
             <span class="hide-menu">DATA BASE</span>
@@ -101,24 +94,24 @@
               <span class="hide-menu">DB Creation</span>
             </a>
           </li>
+        <?php } ?>
       </ul>
 
-    <?php } ?>
-
-    <!-- Logout -->
-    <div class="unlimited-access hide-menu position-relative mb-7 mt-5 rounded">
-      <div class="message-body">
-        <a href="logout.php" class="btn btn-outline-primary mx-3 mt-2 d-block"><i
-            class="ti ti-logout"></i> Logout</a>
+      <!-- Logout -->
+      <div class="unlimited-access hide-menu position-relative mb-7 mt-5 rounded">
+        <div class="message-body">
+          <a href="logout.php" class="btn btn-outline-primary mx-3 mt-2 d-block">
+            <i class="ti ti-logout"></i> Logout
+          </a>
+        </div>
       </div>
-    </div>
-
-    <div class="unlimited-access hide-menu position-relative mb-7 mt-5 rounded">
-      <div class="message-body">
-
+      <div class="unlimited-access hide-menu position-relative mb-7 mt-5 rounded">
+        <div class="message-body">
+          <!-- <a href="logout.php" class="btn btn-outline-primary mx-3 mt-2 d-block">
+            <i class="ti ti-logout"></i> Logout
+          </a> -->
+        </div>
       </div>
-    </div>
-
     </nav>
     <!-- End Sidebar navigation -->
   </div>
@@ -133,7 +126,6 @@
     --muted: #6b7280;
     --primary: #6b70ff;
     --shadow: 0 10px 30px rgba(31, 41, 55, .08);
-
   }
 
   .search {
@@ -142,7 +134,6 @@
     gap: 10px;
     padding: 12px 16px;
     border: 1px solid var(--primary);
-    /* 👈 bold border with theme primary color */
     border-radius: 14px;
     background: var(--card);
     margin: 12px 14px 16px;
@@ -163,34 +154,70 @@
     font-size: 15px;
     font: inherit;
   }
+
+  /* Active state */
+  .sidebar-link.active {
+    color: var(--primary);
+    font-weight: 600;
+  }
 </style>
-
 <script>
-  // Search filter with section header handling
-  searchInput.addEventListener('input', () => {
-    const filter = searchInput.value.toLowerCase();
+window.addEventListener('load', () => {
+  const links = Array.from(document.querySelectorAll('#sidebarnav a.sidebar-link'));
+  // remove any existing active/selected (defensive)
+  links.forEach(a => a.classList.remove('active'));
+  document.querySelectorAll('#sidebarnav li').forEach(li => li.classList.remove('selected'));
 
-    document.querySelectorAll('#sidebarnav > li').forEach(li => {
-      if (li.classList.contains('sidebar-item')) {
-        const text = li.innerText.toLowerCase();
-        li.style.display = text.includes(filter) ? 'block' : 'none';
-      }
-    });
+  const normalize = s => (s || '').toString().toLowerCase().replace(/^\/+|\/+$/g, '');
+  const curPath = normalize(window.location.pathname);
+  const curFile = (curPath.split('/').filter(Boolean).pop() || 'add_user.php').toLowerCase();
 
-    // Hide section headers if all their items are hidden
-    document.querySelectorAll('#sidebarnav > .nav-small-cap').forEach(header => {
-      let next = header.nextElementSibling;
-      let hasVisible = false;
+  let bestLink = null;
+  let bestScore = -1;
 
-      while (next && !next.classList.contains('nav-small-cap')) {
-        if (next.classList.contains('sidebar-item') && next.style.display !== 'none') {
-          hasVisible = true;
-          break;
-        }
-        next = next.nextElementSibling;
-      }
+  links.forEach(link => {
+    const rawHref = link.getAttribute('href') || '';
+    if (!rawHref || rawHref.startsWith('#') || rawHref.startsWith('javascript:')) return;
 
-      header.style.display = hasVisible ? 'block' : 'none';
-    });
+    let url;
+    try {
+      url = new URL(rawHref, window.location.href);
+    } catch (e) {
+      return;
+    }
+
+    const hrefPath = normalize(url.pathname);
+    const hrefFile = hrefPath.split('/').filter(Boolean).pop() || '';
+
+    // scoring: higher is better
+    let score = -1;
+    if (hrefFile && hrefFile === curFile) score = 100;             // exact filename
+    else if (hrefPath && hrefPath === curPath) score = 90;        // exact pathname
+    else if (window.location.href.split('?')[0] === (url.origin + url.pathname)) score = 95; // exact URL without query
+    else if (hrefFile && window.location.href.toLowerCase().includes(hrefFile)) score = 50;    // partial match
+    // small tiebreaker: prefer longer path (more specific)
+    if (score > 0) score += Math.min(20, hrefPath.length / 5);
+
+    if (score > bestScore) {
+      bestScore = score;
+      bestLink = link;
+    }
   });
+
+  // final fallback -> add_user.php link
+  if (!bestLink) {
+    bestLink = document.querySelector('#sidebarnav a[href="add_user.php"], #sidebarnav a[href="/add_user.php"]');
+  }
+
+  if (bestLink) {
+    bestLink.classList.add('active');
+    const li = bestLink.closest('li');
+    if (li) li.classList.add('selected');
+
+    // scroll into view (small delay so rendering is stable)
+    setTimeout(() => bestLink.scrollIntoView({ behavior: 'smooth', block: 'center' }), 150);
+  }
+});
 </script>
+
+

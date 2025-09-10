@@ -1,28 +1,23 @@
 <?php
-include("config.php");
-include("chksession.php");
+session_start();
 
-
-$message = ""; // Initialize message
-if (isset($_POST['create_db'])) {
-
-  $res = pg_query($con, "SELECT 1 FROM pg_database WHERE datname='$db'");
-  if (pg_num_rows($res) == 0) {
+$res = pg_query($con, "SELECT 1 FROM pg_database WHERE datname='$db'");
+if (pg_num_rows($res) == 0) {
     $createDb = pg_query($con, "CREATE DATABASE \"$db\" OWNER $user");
     if (!$createDb) die("Error creating DB: " . pg_last_error());
     echo "Database '$db' created.<br>";
-  } else {
+} else {
     echo "Database '$db' already exists.<br>";
-  }
-  pg_close($con);
+}
+pg_close($con);
 
-  // Step 2: Reconnect to target DB
-  $con = pg_connect("host=$host port=$port dbname=$db user=$user password=$pass");
-  if (!$con) die("Connection to target DB failed: " . pg_last_error());
+// Step 2: Reconnect to target DB
+$con = pg_connect("host=$host port=$port dbname=$db user=$user password=$pass");
+if (!$con) die("Connection to target DB failed: " . pg_last_error());
 
-  // Helper functions
-  function tableExists($con, $table)
-  {
+// Helper functions
+function tableExists($con, $table)
+{
     $res = pg_query($con, "
         SELECT EXISTS (
             SELECT FROM information_schema.tables 
@@ -31,10 +26,10 @@ if (isset($_POST['create_db'])) {
     ");
     $row = pg_fetch_row($res);
     return $row[0] === 't';
-  }
+}
 
-  // Step 3: Define ALL 21 table schemas
-  $tables = [
+// Step 3: Define ALL 21 table schemas
+$tables = [
     "subscriber" => "
 CREATE TABLE public.subscriber (
     subscriber_id character varying(50) NOT NULL,
@@ -337,181 +332,18 @@ CREATE TABLE public.t_registered (
     param character varying(300)
 );"
 
-  ];
+];
 
-  // Step 4: Create all tables
-  foreach ($tables as $name => $ddl) {
+// Step 4: Create all tables
+foreach ($tables as $name => $ddl) {
     if (!tableExists($con, $name)) {
-      $create = pg_query($con, $ddl);
-      if ($create) {
-        $message = "All Table created successfully.<br>";
-      } else {
-        $message =  "Error creating table '$name': " . pg_last_error() . "<br>";
-      }
-    } else {
-      $message =  "All Table  already exists.<br>";
-    }
-  }
-
-
-
-  /**
-   * Helper function to insert defaults if table is empty
-   */
-  function insert_defaults($con, $table, $sql)
-  {
-    $check = pg_query($con, "SELECT 1 FROM {$table} LIMIT 1");
-    if (!$check) {
-      die("Error checking {$table}: " . pg_last_error($con));
-    }
-    if (pg_num_rows($check) == 0) {
-      $insert = pg_query($con, $sql);
-      if (!$insert) {
-        die("Error inserting into {$table}: " . pg_last_error($con));
-      } else {
-        //echo "{$table} default values inserted.<br>";
-      }
-    } else {
-      //echo "{$table} already has data.<br>";
-    }
-  }
-
-  /** --------------------------
-   *  Insert default data
-   *  -------------------------- */
-
-  // conference_layouts defaults
-  insert_defaults($con, "conference_layouts", "
-    INSERT INTO conference_layouts (layoutname, action_date, id) VALUES
-    ('1x1', NULL, '1'),
-    ('1x2', NULL, '2'),
-    ('2x1', NULL, '3'),
-    ('2x1-zoom', NULL, '4'),
-    ('3x1-zoom', NULL, '5'),
-    ('5-grid-zoom', NULL, '6'),
-    ('3x2-zoom', NULL, '7'),
-    ('7-grid-zoom', NULL, '8'),
-    ('4x2-zoom', NULL, '9'),
-    ('1x1+2x1', NULL, '10'),
-    ('2x2', NULL, '11'),
-    ('3x3', NULL, '12'),
-    ('4x4', NULL, '13'),
-    ('5x5', NULL, '14'),
-    ('6*6', NULL, '15'),
-    ('8*8', NULL, '16')
-");
-
-  // ip_setting defaults
-  insert_defaults($con, "ip_setting", "
-    INSERT INTO ip_setting (ip_name, ip_address, action_date, id) VALUES
-    ('External_Rtp_IP & Sip_IP', '10.185.13.35', NULL, '5'),
-    ('Internal_Rtp_IP & Sip_IP', '10.185.13.38', NULL, '6')
-");
-
-  // layout_setting defaults
-  insert_defaults($con, "layout_setting", "
-    INSERT INTO layout_setting (layoutnumber, action_date, id) VALUES
-    ('7-grid-zoom', NULL, '1')
-");
-
-  // port_setting defaults
-  insert_defaults($con, "port_setting", "
-    INSERT INTO port_setting (portnumber, portname, action_date, id) VALUES
-    ('508', 'Internal_Sip_Port', NULL, '4'),
-    ('509', 'Internal_Tls_Port', NULL, '2'),
-    ('600', 'WSS_Port', NULL, '5'),
-    ('511', 'External_Sip_Port', NULL, '3'),
-    ('517', 'External_Tls_port', NULL, '1')
-");
-
-  // registrationnumbers defaults
-  insert_defaults($con, "registrationnumbers", "
-    INSERT INTO registrationnumbers (number, status, lastupdated) VALUES
-    ('1233', 'Unregistered', '2025-12-07 00:00:00')
-");
-
-  // subscriber defaults
-  insert_defaults($con, "subscriber", "
-    INSERT INTO subscriber (subscriber_id, password, action_date, id) VALUES
-    ('Default', 'Naminfocom@1234589', NULL, '1')
-");
-}
-
-
-
-?>
-
-<!doctype html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>DB Backup</title>
-  <link rel="shortcut icon" type="image/png" href="assets/images/logos/favicon.png" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-  <link rel="stylesheet" href="assets/css/styles.min.css" />
-</head>
-
-<body>
-  <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
-    data-sidebar-position="fixed" data-header-position="fixed">
-    <?php include("sidebar.php"); ?>
-    <div class="body-wrapper">
-      <?php include("header.php"); ?>
-      <div class="container-fluid">
-        <div class="table-responsive">
-          <form method="post">
-            <table class="table table-bordered text-center mt-4">
-              <thead>
-                <tr>
-                  <th>
-                    <button class="btn btn-primary" type="submit" name="create_db">
-                      <i class="fa fa-plus-circle"></i>&nbsp;&nbsp;DB Creation
-                    </button>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    <button class="btn btn-primary" type="submit" onclick="dbdownload();">
-                      <i class="fa fa-cloud-upload"></i> &nbsp;&nbsp;DB Backup (SQL)
-                    </button>
-                    <?php if (!empty($message)) echo "<p>$message</p>"; ?>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script src="assets/libs/jquery/dist/jquery.min.js"></script>
-  <script src="assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/js/sidebarmenu.js"></script>
-  <script src="assets/js/app.min.js"></script>
-  <script>
-    function dbdownload() {
-      $.ajax({
-        url: 'dbbackup.php', // Your PHP script that does the backup
-        type: 'GET', // or 'POST' if needed
-        success: function(response) {
-          // Optional: handle response from PHP
-          alert("Database backup completed successfully!");
-
-          // Reload the current page
-          location.reload();
-        },
-        error: function(xhr, status, error) {
-          console.error('Backup failed:', error);
+        $create = pg_query($con, $ddl);
+        if ($create) {
+            echo "Table '$name' created successfully.<br>";
+        } else {
+            echo "Error creating table '$name': " . pg_last_error() . "<br>";
         }
-      });
-
+    } else {
+        echo "Table '$name' already exists.<br>";
     }
-  </script>
-</body>
-
-</html>
+}

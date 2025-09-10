@@ -1,4 +1,6 @@
-<?php include("config.php"); ?>
+<?php include("config.php");
+include("chksession.php");
+ ?>
 <!doctype html>
 <html lang="en">
 

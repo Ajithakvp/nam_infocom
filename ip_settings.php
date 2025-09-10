@@ -1,4 +1,8 @@
-<?php include("config.php"); ?>
+<?php include("config.php");
+include("chksession.php");
+
+include("check_table.php");
+$ctbl = tablecheck($con, "ip_setting"); ?>
 <!doctype html>
 <html lang="en">
 
@@ -39,42 +43,47 @@
             <div class="container-fluid">
                 <!--  Row 1 -->
 
-                <!--  Row 1 -->
-                <div class="table-responsive">
-                    <table id="example" class="table table-striped table-bordered nowrap" style="width:100%">
-                        <thead>
-                            <tr>
+                <?php if ($ctbl) { ?>
 
-                                <th>IP Type</th>
-                                <th>IP Address</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            $sql = "SELECT * FROM public.ip_setting ORDER BY id ASC";
-                            $res = pg_query($con, $sql);
-                            if (pg_num_rows($res) > 0) {
-                                while ($row = pg_fetch_array($res)) {
-                            ?>
-                                    <tr>
-                                        <td><?php echo $row['ip_name']; ?></td>
-                                        <td><?php echo $row['ip_address']; ?></td>
-                                        <td class="action-icons">
-                                            <i class="fa-regular fa-edit text-primary me-3" data-id="<?php echo $row['id']; ?>"
-                                                style="font-size:20px; cursor:pointer;"></i>
+                    <!--  Row 1 -->
+                    <div class="table-responsive">
+                        <table id="example" class="table table-striped table-bordered nowrap" style="width:100%">
+                            <thead>
+                                <tr>
 
-                                        </td>
-                                    </tr>
+                                    <th>IP Type</th>
+                                    <th>IP Address</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $sql = "SELECT * FROM public.ip_setting ORDER BY id ASC";
+                                $res = pg_query($con, $sql);
+                                if (pg_num_rows($res) > 0) {
+                                    while ($row = pg_fetch_array($res)) {
+                                ?>
+                                        <tr>
+                                            <td><?php echo $row['ip_name']; ?></td>
+                                            <td><?php echo $row['ip_address']; ?></td>
+                                            <td class="action-icons">
+                                                <i class="fa-regular fa-edit text-primary me-3" data-id="<?php echo $row['id']; ?>"
+                                                    style="font-size:20px; cursor:pointer;"></i>
 
-                            <?php
+                                            </td>
+                                        </tr>
+
+                                <?php
+                                    }
                                 }
-                            }
-                            ?>
+                                ?>
 
-                        </tbody>
-                    </table>
-                </div>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php } else {
+                    echo $msg;
+                } ?>
 
             </div>
         </div>
@@ -96,7 +105,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="editLastname" class="form-label">IP Address</label>
-                            <input type="text" class="form-control" id="editLastname">
+                            <input type="text" class="form-control" id="editLastname" maxlength="15">
                             <span id="editLastnameError" style="color:red;display:none;font-size:14px;"></span>
 
                         </div>

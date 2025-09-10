@@ -1,6 +1,8 @@
 <?php
 //include("auth_check.php"); // protect page
 include("config.php");
+include("chksession.php");
+
 // Prevent browser caching of this page
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Cache-Control: post-check=0, pre-check=0", false);
@@ -221,13 +223,13 @@ header("Pragma: no-cache");
   </div>
 
   <!-- ADD Modal -->
-  <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserLabel" aria-hidden="true">
+  <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-xl"> <!-- Extra large modal -->
       <div class="modal-content">
 
         <div class="modal-header">
           <h5 class="modal-title" id="addUserLabel">Add User</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" id="closeaddUser" aria-label="Close"></button>
         </div>
 
         <div class="modal-body">
@@ -374,7 +376,7 @@ header("Pragma: no-cache");
 
         <div class="modal-footer">
           <button type="button" class="btn btn-primary" id="submitAddUser">Add</button>
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-secondary" id="cancelAddUser" data-bs-dismiss="modal">Cancel</button>
         </div>
 
       </div>
@@ -1208,6 +1210,18 @@ header("Pragma: no-cache");
         .catch(err => console.error(err));
     });
   </script>
+
+  <script>
+    document.getElementById("cancelAddUser").addEventListener("click", function() {
+      location.reload();
+    });
+
+    document.getElementById("closeaddUser").addEventListener("click", function() {
+      location.reload();
+    });
+  </script>
+
+
 
   <script>
     // Get all three input fields

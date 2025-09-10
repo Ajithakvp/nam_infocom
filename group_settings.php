@@ -1,4 +1,8 @@
-<?php include("config.php"); ?>
+<?php include("config.php");
+include("chksession.php");
+
+include("check_table.php");
+$ctbl = tablecheck($con, "group_setting"); ?>
 <!doctype html>
 <html lang="en">
 
@@ -135,54 +139,59 @@
       <?php include("header.php"); ?>
 
       <div class="container-fluid">
-        <!-- Top Bar -->
-        <div class="top-bar mb-3 d-flex justify-content-end">
-          <button class="btn btn-primary add-btn"><i class="fa fa-plus"></i> Add Group</button>
-        </div>
+        <?php if ($ctbl) { ?>
 
-        <!-- Table -->
-        <div class="table-responsive">
-          <table id="example" class="table table-striped table-bordered nowrap" style="width:100%">
-            <thead>
-              <tr>
-                <th>Action</th>
-                <th>Conference</th>
-                <th>Group Name</th>
-                <th>Group Number</th>
-                <th>Call Type</th>
-                <th>Moderate</th>
-                <th>View</th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php
-              $sql = "SELECT * FROM public.group_setting ORDER BY id DESC";
-              $res = pg_query($con, $sql);
-              if ($res && pg_num_rows($res) > 0) {
-                while ($row = pg_fetch_array($res)) {
-                  $id = $row['id'];
-              ?>
-                  <tr data-id="<?php echo htmlspecialchars($id); ?>">
-                    <td class="action-icons">
-                      <i class="fa-regular fa-edit text-primary me-3 edit-btn" style="font-size:20px; cursor:pointer;"></i>
-                      <i class="fa-regular fa-trash-alt text-danger delete-btn" style="font-size:20px; cursor:pointer;"></i>
-                    </td>
-                    <td><?php echo htmlspecialchars($row['conference']); ?></td>
-                    <td><?php echo htmlspecialchars($row['group_name']); ?></td>
-                    <td><?php echo htmlspecialchars($row['group_number']); ?></td>
-                    <td><?php echo htmlspecialchars($row['calltype']); ?></td>
-                    <td><?php echo htmlspecialchars($row['moderate']); ?></td>
-                    <td>
-                      <button class="btn btn-sm btn-primary" onclick="callviewinfo('<?php echo htmlspecialchars($id); ?>')">Info</button>
-                    </td>
-                  </tr>
-              <?php
+          <!-- Top Bar -->
+          <div class="top-bar mb-3 d-flex justify-content-end">
+            <button class="btn btn-primary add-btn"><i class="fa fa-plus"></i> Add Group</button>
+          </div>
+
+          <!-- Table -->
+          <div class="table-responsive">
+            <table id="example" class="table table-striped table-bordered nowrap" style="width:100%">
+              <thead>
+                <tr>
+                  <th>Action</th>
+                  <th>Conference</th>
+                  <th>Group Name</th>
+                  <th>Group Number</th>
+                  <th>Call Type</th>
+                  <th>Moderate</th>
+                  <th>View</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php
+                $sql = "SELECT * FROM public.group_setting ORDER BY id DESC";
+                $res = pg_query($con, $sql);
+                if ($res && pg_num_rows($res) > 0) {
+                  while ($row = pg_fetch_array($res)) {
+                    $id = $row['id'];
+                ?>
+                    <tr data-id="<?php echo htmlspecialchars($id); ?>">
+                      <td class="action-icons">
+                        <i class="fa-regular fa-edit text-primary me-3 edit-btn" style="font-size:20px; cursor:pointer;"></i>
+                        <i class="fa-regular fa-trash-alt text-danger delete-btn" style="font-size:20px; cursor:pointer;"></i>
+                      </td>
+                      <td><?php echo htmlspecialchars($row['conference']); ?></td>
+                      <td><?php echo htmlspecialchars($row['group_name']); ?></td>
+                      <td><?php echo htmlspecialchars($row['group_number']); ?></td>
+                      <td><?php echo htmlspecialchars($row['calltype']); ?></td>
+                      <td><?php echo htmlspecialchars($row['moderate']); ?></td>
+                      <td>
+                        <button class="btn btn-sm btn-primary" onclick="callviewinfo('<?php echo htmlspecialchars($id); ?>')">Info</button>
+                      </td>
+                    </tr>
+                <?php
+                  }
                 }
-              }
-              ?>
-            </tbody>
-          </table>
-        </div>
+                ?>
+              </tbody>
+            </table>
+          </div>
+        <?php } else {
+          echo $msg;
+        } ?>
       </div>
     </div>
   </div>

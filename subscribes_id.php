@@ -1,4 +1,8 @@
-<?php include("config.php"); ?>
+<?php include("config.php");
+include("chksession.php");
+include("check_table.php");
+$ctbl = tablecheck($con, "subscriber");
+?>
 <!doctype html>
 <html lang="en">
 
@@ -36,44 +40,48 @@
             <!--  Header End -->
             <div class="container-fluid">
                 <!--  Row 1 -->
+                <?php if ($ctbl) { ?>
+                    <!--  Row 1 -->
+                    <div class="table-responsive">
+                        <table id="example" class="table table-striped table-bordered nowrap" style="width:100%">
+                            <thead>
+                                <tr>
 
-                <!--  Row 1 -->
-                <div class="table-responsive">
-                    <table id="example" class="table table-striped table-bordered nowrap" style="width:100%">
-                        <thead>
-                            <tr>
+                                    <th>User Name</th>
+                                    <th>Password</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php $sql = "SELECT * FROM public.subscriber ORDER BY id ASC";
+                                $res = pg_query($con, $sql);
+                                if (pg_num_rows($res) > 0) {
+                                    while ($row = pg_fetch_array($res)) {
+                                ?>
+                                        <tr>
 
-                                <th>User Name</th>
-                                <th>Password</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php $sql = "SELECT * FROM public.subscriber ORDER BY id ASC";
-                            $res = pg_query($con, $sql);
-                            if (pg_num_rows($res) > 0) {
-                                while ($row = pg_fetch_array($res)) {
-                            ?>
-                                    <tr>
+                                            <td><?php echo $row['subscriber_id']; ?></td>
+                                            <td><?php echo $row['password']; ?></td>
+                                            <td class="action-icons">
+                                                <i class="fa-regular fa-edit text-primary me-3"
+                                                    style="font-size:20px; cursor:pointer;"></i>
 
-                                        <td><?php echo $row['subscriber_id']; ?></td>
-                                        <td><?php echo $row['password']; ?></td>
-                                        <td class="action-icons">
-                                            <i class="fa-regular fa-edit text-primary me-3"
-                                                style="font-size:20px; cursor:pointer;"></i>
+                                            </td>
+                                        </tr>
 
-                                        </td>
-                                    </tr>
-
-                            <?php
+                                <?php
+                                    }
                                 }
-                            }
-                            ?>
+                                ?>
 
 
-                        </tbody>
-                    </table>
-                </div>
+                            </tbody>
+                        </table>
+                    </div>
+
+                <?php } else {
+                    echo $msg;
+                } ?>
 
             </div>
         </div>

@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 
 $host = "localhost";
@@ -139,17 +138,3 @@ if (pg_num_rows($checkAdmin) == 0) {
     //echo "Admin record already exists.<br>";
 }
 
-
-
-// else {
-//     echo "Connected successfully";
-// }
-date_default_timezone_set('Asia/Kolkata');
-
-//Windows Freeswitch Xml Path Location
-$fileadduserxmlpath = "C:/Program Files/FreeSWITCH/conf/directory/default";
-$filesubidxmlPath = "C:/Program Files/FreeSWITCH/conf/vars.xml";
-$fileipsettingxmlPath = "C:/Program Files/FreeSWITCH/conf/sip_profiles/internal.xml";
-$fileportsettingxmlPath = "C:/Program Files/FreeSWITCH/conf/vars.xml";
-$filelayoutsetxmlPath = "C:\\Program Files\\FreeSWITCH\\conf\\autoload_configs\\conference.conf.xml";
-$filegrupSettingxmlPath = "C:/Program Files/FreeSWITCH/conf/dialplan/default.xml";

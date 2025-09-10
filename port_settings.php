@@ -1,4 +1,7 @@
-<?php include("config.php"); ?>
+<?php include("config.php");
+include("chksession.php");
+include("check_table.php");
+$ctbl = tablecheck($con, "port_setting"); ?>
 <!doctype html>
 <html lang="en">
 
@@ -37,41 +40,45 @@
             <!--  Header End -->
             <div class="container-fluid">
                 <!--  Row 1 -->
+                <?php if ($ctbl) { ?>
 
-                <!--  Row 1 -->
-                <div class="table-responsive">
-                    <table id="example" class="table table-striped table-bordered nowrap" style="width:100%">
-                        <thead>
-                            <tr>
+                    <!--  Row 1 -->
+                    <div class="table-responsive">
+                        <table id="example" class="table table-striped table-bordered nowrap" style="width:100%">
+                            <thead>
+                                <tr>
 
-                                <th>Port Name</th>
-                                <th>Port Number</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php $sql = "SELECT * FROM public.port_setting ORDER BY id ASC ";
-                            $res = pg_query($con, $sql);
-                            if (pg_num_rows($res) > 0) {
-                                while ($row = pg_fetch_array($res)) {
-                            ?>
+                                    <th>Port Name</th>
+                                    <th>Port Number</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php $sql = "SELECT * FROM public.port_setting ORDER BY id ASC ";
+                                $res = pg_query($con, $sql);
+                                if (pg_num_rows($res) > 0) {
+                                    while ($row = pg_fetch_array($res)) {
+                                ?>
 
-                                    <tr>
+                                        <tr>
 
-                                        <td><?php echo $row['portname']; ?></td>
-                                        <td><?php echo $row['portnumber'] ?></td>
-                                        <td class="action-icons">
-                                            <i class="fa-regular fa-edit text-primary me-3" data-id="<?php echo $row['id']; ?>"
-                                                style="font-size:20px; cursor:pointer;"></i>
+                                            <td><?php echo $row['portname']; ?></td>
+                                            <td><?php echo $row['portnumber'] ?></td>
+                                            <td class="action-icons">
+                                                <i class="fa-regular fa-edit text-primary me-3" data-id="<?php echo $row['id']; ?>"
+                                                    style="font-size:20px; cursor:pointer;"></i>
 
-                                        </td>
-                                    </tr>
-                            <?php
-                                }
-                            } ?>
-                        </tbody>
-                    </table>
-                </div>
+                                            </td>
+                                        </tr>
+                                <?php
+                                    }
+                                } ?>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php } else {
+                    echo $msg;
+                } ?>
 
             </div>
         </div>
