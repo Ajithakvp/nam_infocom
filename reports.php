@@ -1,6 +1,6 @@
 <?php include("config.php");
 include("chksession.php");
- ?>
+?>
 <!doctype html>
 <html lang="en">
 
@@ -199,7 +199,17 @@ include("chksession.php");
                     columns: function(idx, data, node) {
                       return true; // ✅ ensures all columns are exported
                     }
+                  },
+                  action: function(e, dt, button, config) {
+                    if (dt.data().count() === 0) {
+                      alert("⚠️ No data available!");
+                      return; // ❌ stop export
+                    }
+
+                    // ✅ Call the original action if data exists
+                    $.fn.dataTable.ext.buttons.excelHtml5.action.call(this, e, dt, button, config);
                   }
+
                 }
               ]
             });

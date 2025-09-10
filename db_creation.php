@@ -47,7 +47,7 @@ CREATE TABLE public.subscriber (
 CREATE TABLE public.group_setting (
     group_number VARCHAR(50),
     action_date TIMESTAMP,
-    id BIGINT PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     group_name VARCHAR(100),
     conference VARCHAR(100),
     user_details VARCHAR(4000),

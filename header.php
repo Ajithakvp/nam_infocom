@@ -28,10 +28,10 @@ include("chksession.php");
           </a>
           <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
             <div class="message-body">
-              <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
+              <div class="d-flex align-items-center gap-2 dropdown-item" onclick="viewaboutdialog();">
                 <i class="ti ti-info-circle fs-6"></i>
                 <p class="mb-0 fs-3">About</p>
-              </a>
+              </div>
               <a href="logout.php" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
             </div>
           </div>
@@ -40,3 +40,43 @@ include("chksession.php");
     </div>
   </nav>
 </header>
+
+<script>
+  function viewaboutdialog() {
+    let deleteModal = new bootstrap.Modal(document.getElementById('viewabout'));
+    deleteModal.show();
+  }
+</script>
+
+<!-- About / Version Modal -->
+<div class="modal fade" id="viewabout" tabindex="-1" aria-labelledby="viewaboutlabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content shadow-lg border-0 rounded-4">
+
+      <!-- Modal Header -->
+      <div class="modal-header text-white"
+        style="background: linear-gradient(135deg, #5d87ff, #3a4ed5); border-top-left-radius: 0.5rem; border-top-right-radius: 0.5rem;">
+        <i class="ti ti-info-circle fs-6 text-warning"></i> &nbsp;&nbsp;
+        <h5 class="modal-title fw-bold" style="color:aliceblue">
+          Version <span class="badge bg-light text-primary ms-2">Latest</span>
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body text-center p-4">
+        <h6 class="fw-semibold text-dark mb-2">Configuration Settings</h6>
+        <p class="text-muted mb-1">Application UI <span class="fw-bold">v1.3.4</span></p>
+        <small class="text-secondary">Released on <span class="fw-semibold">Apr 21, 2025</span></small>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer justify-content-center border-0 pb-4">
+        <button type="button" class="btn btn-sm px-4 rounded-pill"
+          style="background: #5d87ff; color: #fff;" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

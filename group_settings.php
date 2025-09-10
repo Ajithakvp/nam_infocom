@@ -197,7 +197,7 @@ $ctbl = tablecheck($con, "group_setting"); ?>
   </div>
 
   <!-- Edit Modal -->
-  <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+  <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
@@ -290,12 +290,12 @@ $ctbl = tablecheck($con, "group_setting"); ?>
 
 
   <!-- Add Modal -->
-  <div class="modal fade" id="addModalgrp" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+  <div class="modal fade" id="addModalgrp" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="addModalLabel">Add Group</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="closegrp"></button>
         </div>
         <div class="modal-body">
           <form id="addForm">
@@ -374,7 +374,7 @@ $ctbl = tablecheck($con, "group_setting"); ?>
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cancelgrp">Cancel</button>
           <button type="submit" class="btn btn-primary" form="addForm">Add</button>
         </div>
       </div>
@@ -383,7 +383,7 @@ $ctbl = tablecheck($con, "group_setting"); ?>
 
 
   <!-- View Modal -->
-  <div class="modal fade" id="viewModaluser" tabindex="-1" aria-labelledby="viewModalLabel" aria-hidden="true">
+  <div class="modal fade" id="viewModaluser" tabindex="-1" aria-labelledby="viewModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
@@ -398,7 +398,7 @@ $ctbl = tablecheck($con, "group_setting"); ?>
   </div>
 
   <!-- Delete Modal -->
-  <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -682,6 +682,7 @@ $ctbl = tablecheck($con, "group_setting"); ?>
   </script>
 
 
+
   <script>
     $(document).ready(function() {
       // DataTable
@@ -947,6 +948,16 @@ $ctbl = tablecheck($con, "group_setting"); ?>
         dropdownParent: $('#editModal')
       });
 
+    });
+  </script>
+
+  <script>
+    document.getElementById("cancelgrp").addEventListener("click", function() {
+      location.reload();
+    });
+
+    document.getElementById("closegrp").addEventListener("click", function() {
+      location.reload();
     });
   </script>
 

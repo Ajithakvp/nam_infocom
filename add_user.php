@@ -386,7 +386,7 @@ header("Pragma: no-cache");
 
 
   <!-- Edit Modal -->
-  <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+  <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
@@ -1097,7 +1097,6 @@ header("Pragma: no-cache");
       templateResult: formatCountry,
       templateSelection: formatCountrySelection,
       placeholder: "--Select country--",
-      allowClear: true,
     });
 
     // Edit User Modal

@@ -205,7 +205,7 @@ include("config.php");
     </div>
 
     <div class="options">
-      <a href="#">Forgot password?</a>
+      <a href="#"></a>
     </div>
 
     <button class="btn" id="loginBtn">SIGN IN</button>
