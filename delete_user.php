@@ -30,6 +30,7 @@ if (isset($_POST['id'])) {
         // Try deleting the file
         if (@unlink($filePath)) {
             echo "success";
+            include("reloadxml.php");
         } else {
             die("❌ Failed to delete file. Check permissions.\n");
         }

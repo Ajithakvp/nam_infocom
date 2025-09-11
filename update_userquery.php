@@ -189,7 +189,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $xmlString = $dom->saveXML();
 
             // Path to FreeSWITCH user directory
-            $folder = "C:/Program Files/FreeSWITCH/conf/directory/default";
+            $folder = $fileadduserxmlpath;
 
             // Ensure folder exists
             if (!is_dir($folder)) {
@@ -202,6 +202,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Write XML file
             if (file_put_contents($filePath, $xmlString)) {
                 echo "✅ User updated successfully!";
+                include("reloadxml.php");
             } else {
                 echo "❌ Failed to create file. Try running PHP as Administrator.";
                 logError(pg_last_error($con));

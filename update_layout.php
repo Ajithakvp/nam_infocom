@@ -65,6 +65,7 @@ if (isset($_POST['layout_val'])) {
                 logError(pg_last_error($con));
             }
             echo "✅ Update Successfully " . $layout_val;
+            include("reloadxml.php");
         } else {
             echo "⚠️ Profile 'video-mcu-stereo' not found in XML.";
             logError(pg_last_error($con));

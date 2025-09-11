@@ -53,6 +53,7 @@ if (isset($_POST['username'], $_POST['passwordstr'])) {
         // Save file
         if ($dom->save($filePath)) {
             echo "✅ Updated Successfully !";
+            include("reloadxml.php");
         } else {
             echo "❌ Failed to save vars.xml. Run PHP/Apache as Administrator.";
             logError(pg_last_error($con));

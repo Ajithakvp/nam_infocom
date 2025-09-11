@@ -66,6 +66,7 @@ if ($res) {
     if ($removed > 0) {
         if ($dom->save($filePath)) {
             echo "Deleted Successfully!";
+            include("reloadxml.php");
         }
     }
 } else {

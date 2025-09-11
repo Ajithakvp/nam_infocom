@@ -155,6 +155,7 @@ XML;
                 // Save file back
                 if (file_put_contents($filePath, $updatedContent)) {
                     echo "success";
+                    include("reloadxml.php");
                 } else {
                     echo "❌ Failed to save file.";
                     logError("Failed to save file." . pg_last_error($con));
@@ -232,6 +233,7 @@ XML;
                     logError("Failed to update XML file. Try running PHP as Administrator." . pg_last_error($con));
                 } else {
                     echo "success";
+                    include("reloadxml.php");
                 }
             } else if ($conference == "Video" && $callType == "Dial-OUT") {
 
@@ -355,6 +357,7 @@ XML;
                 // Save
                 if ($dom->save($filePath)) {
                     echo "success";
+                    include("reloadxml.php");
                 } else {
                     echo "❌ Failed to save file.";
                     logError(pg_last_error($con));

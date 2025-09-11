@@ -62,6 +62,7 @@ if (isset($_POST['port_id'], $_POST['portname'], $_POST['portno'])) {
             // Save updated XML
             if ($xml->save($filePath)) {
                 echo "Record updated (Port NO: $portno)";
+                include("reloadxml.php");
             } else {
                 echo "❌ Failed to save vars.xml (check permissions)";
                 logError(pg_last_error($con));
