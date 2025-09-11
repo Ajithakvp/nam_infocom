@@ -164,6 +164,9 @@
 <script>
   window.addEventListener('load', () => {
     const links = Array.from(document.querySelectorAll('#sidebarnav a.sidebar-link'));
+    if (!links.length) return;
+
+    // Remove previous active/selected
     links.forEach(a => a.classList.remove('active'));
     document.querySelectorAll('#sidebarnav li').forEach(li => li.classList.remove('selected'));
 
@@ -175,12 +178,12 @@
     let bestScore = -1;
 
     links.forEach(link => {
-      const rawHref = link.getAttribute('href');
+      let rawHref = link.getAttribute('href');
       if (!rawHref || rawHref.startsWith('#') || rawHref.startsWith('javascript:')) return;
 
       let url;
       try {
-        url = new URL(rawHref, window.location.href);
+        url = new URL(rawHref, window.location.origin + '/');
       } catch (e) {
         return;
       }
@@ -188,22 +191,21 @@
       const hrefPath = normalize(url.pathname);
       const hrefFile = hrefPath.split('/').filter(Boolean).pop() || '';
 
-      let score = -1;
-      if (hrefFile && hrefFile === curFile) score = 100; // exact file match
-      else if (hrefPath && hrefPath === curPath) score = 90; // exact path match
-      else if ((url.origin + url.pathname) === window.location.href.split('?')[0]) score = 95;
-      else if (hrefFile && curPath.includes(hrefFile)) score = 40; // less aggressive partial match
+      let score = 0;
 
-      if (score > 0) score += Math.min(20, hrefPath.length / 5);
+      if (hrefPath === curPath) score = 100; // exact path match
+      else if (hrefFile && hrefFile === curFile) score = 90; // exact file match
+      else if (curPath.includes(hrefFile)) score = 50; // partial match
+
       if (score > bestScore) {
         bestScore = score;
         bestLink = link;
       }
     });
 
-    // Only fall back if nothing scored at all
+    // fallback to add_user.php if nothing matched
     if (!bestLink && curFile === '') {
-      bestLink = document.querySelector('#sidebarnav a[href="add_user.php"], #sidebarnav a[href="/add_user.php"]');
+      bestLink = document.querySelector('#sidebarnav a[href*="add_user.php"]');
     }
 
     if (bestLink) {

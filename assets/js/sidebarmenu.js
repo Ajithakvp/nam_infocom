@@ -1,39 +1,82 @@
-$(function () {
-  "use strict";
+document.addEventListener('DOMContentLoaded', () => {
+  const STORAGE_KEY = "activeMenu";
+  const SCROLL_PADDING = 80;
+  const container = document.querySelector('.scroll-sidebar');
+  const links = Array.from(document.querySelectorAll('#sidebarnav a.sidebar-link'));
 
-  var STORAGE_KEY = "activeMenu";
-  var SCROLL_PADDING = 80; // adjust how much space above item
+  if (!links.length) return;
 
-  // Save clicked menu before reload
-  $("#sidebarnav a").on("click", function () {
-    var href = $(this).attr("href");
-    if (href && href !== "#" && href.indexOf("javascript:") !== 0) {
+  // Helper to remove active classes
+  const clearActive = () => {
+    links.forEach(a => a.classList.remove('active'));
+    document.querySelectorAll('#sidebarnav li').forEach(li => li.classList.remove('selected'));
+    document.querySelectorAll('#sidebarnav ul').forEach(ul => ul.classList.remove('in'));
+  };
+
+  // Helper to activate a link
+  const activateLink = (link) => {
+    clearActive();
+    link.classList.add('active');
+    let li = link.closest('li');
+    if (li) li.classList.add('selected');
+    let ul = link.closest('ul');
+    if (ul) ul.classList.add('in');
+
+    if (container) {
+      const offset = link.offsetTop - container.offsetTop - SCROLL_PADDING;
+      container.scrollTop = offset;
+    }
+
+    // Save in localStorage
+    const href = link.getAttribute('href');
+    if (href && !href.startsWith('#') && !href.startsWith('javascript:')) {
       localStorage.setItem(STORAGE_KEY, href);
     }
-  });
+  };
 
-  // After page load, restore active menu
-  var savedHref = localStorage.getItem(STORAGE_KEY);
-  if (savedHref) {
-    var element = $("#sidebarnav a[href='" + savedHref + "']").first();
+  // Try to restore from localStorage first
+  let savedHref = localStorage.getItem(STORAGE_KEY);
+  let bestLink = savedHref ? links.find(a => a.getAttribute('href') === savedHref) : null;
 
-    if (element.length) {
-      // Remove old states
-      $("#sidebarnav a").removeClass("active");
-      $("#sidebarnav li").removeClass("selected active");
-      $("#sidebarnav ul").removeClass("in");
+  // If no saved link, fallback to URL detection
+  if (!bestLink) {
+    const normalize = s => (s || '').toLowerCase().replace(/^\/+|\/+$/g, '');
+    const curPath = normalize(window.location.pathname);
+    const curFile = curPath.split('/').filter(Boolean).pop() || '';
 
-      // Mark active + open parents
-      element.addClass("active");
-      element.parents("li").addClass("selected");
-      element.parents("ul").addClass("in");
+    let bestScore = -1;
+    links.forEach(link => {
+      let href = link.getAttribute('href');
+      if (!href || href.startsWith('#') || href.startsWith('javascript:')) return;
 
-      // Scroll into view
-      var container = $(".scroll-sidebar");
-      if (container.length) {
-        var offset = element.offset().top - container.offset().top + container.scrollTop() - SCROLL_PADDING;
-        container.scrollTop(offset);
+      let url;
+      try { url = new URL(href, window.location.origin + '/'); }
+      catch (e) { return; }
+
+      const hrefPath = normalize(url.pathname);
+      const hrefFile = hrefPath.split('/').filter(Boolean).pop() || '';
+      let score = 0;
+
+      if (hrefPath === curPath) score = 100;
+      else if (hrefFile === curFile) score = 90;
+      else if (curPath.includes(hrefFile)) score = 50;
+
+      if (score > bestScore) {
+        bestScore = score;
+        bestLink = link;
       }
+    });
+
+    // fallback to add_user.php if nothing matched
+    if (!bestLink && curFile === '') {
+      bestLink = document.querySelector('#sidebarnav a[href*="add_user.php"]');
     }
   }
+
+  if (bestLink) activateLink(bestLink);
+
+  // Save click events
+  links.forEach(link => {
+    link.addEventListener('click', (e) => activateLink(link));
+  });
 });
