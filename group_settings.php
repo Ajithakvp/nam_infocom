@@ -156,7 +156,7 @@ $ctbl = tablecheck($con, "group_setting"); ?>
                   <th>Group Name</th>
                   <th>Group Number</th>
                   <th>Call Type</th>
-                  <th>Moderate</th>
+                  <th>Moderator</th>
                   <th>View</th>
                 </tr>
               </thead>

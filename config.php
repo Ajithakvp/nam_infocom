@@ -175,9 +175,9 @@ if (pg_num_rows($checkAdmin) == 0) {
 date_default_timezone_set('Asia/Kolkata');
 
 //Windows Freeswitch Xml Path Location
-$fileadduserxmlpath = "C:/Program Files/FreeSWITCH/conf/directory/default";
-$filesubidxmlPath = "C:/Program Files/FreeSWITCH/conf/vars.xml";
-$fileipsettingxmlPath = "C:/Program Files/FreeSWITCH/conf/sip_profiles/internal.xml";
-$fileportsettingxmlPath = "C:/Program Files/FreeSWITCH/conf/vars.xml";
-$filelayoutsetxmlPath = "C:\\Program Files\\FreeSWITCH\\conf\\autoload_configs\\conference.conf.xml";
-$filegrupSettingxmlPath = "C:/Program Files/FreeSWITCH/conf/dialplan/default.xml";
+$fileadduserxmlpath = $config['ADD_USER_PATH'];
+$filesubidxmlPath = $config['SUB_ID_PATH'];
+$fileipsettingxmlPath = $config['IP_SETTING_PATH'];
+$fileportsettingxmlPath = $config['PORT_SETTING_PATH'];
+$filelayoutsetxmlPath = $config['LAYOUT_SETTING_PATH'];
+$filegrupSettingxmlPath = $config['GRP_SETTING_PATH'];

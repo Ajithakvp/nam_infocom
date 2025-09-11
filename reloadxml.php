@@ -1,5 +1,5 @@
 <?php
-$host = '127.0.0.1';   // ✅ Use IPv4 loopback
+$host = '0.0.0.0';   // ✅ Use IPv4 loopback
 $port = 8021;
 $password = 'ClueCon';
 
@@ -12,5 +12,5 @@ fwrite($fp, "auth $password\n\n");
 fwrite($fp, "api reloadxml\n\n");
 fclose($fp);
 
-echo "Reloaded XML successfully.";
+//echo "Reloaded XML successfully.";
 ?>

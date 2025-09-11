@@ -246,6 +246,7 @@ if ($res) {
     // Write XML file
     if (file_put_contents($filePath, $xmlString)) {
         echo "1";
+        include("reloadxml.php");
     } else {
         echo "❌ Failed to create file. Try running PHP as Administrator.";
         logError("Query failed: " . pg_last_error($con));

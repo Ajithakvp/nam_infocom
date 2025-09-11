@@ -101,6 +101,7 @@ XML;
         // Save file back
         if (file_put_contents($filePath, $updatedContent)) {
             echo "success";
+            include("reloadxml.php");
         } else {
             echo "❌ Failed to save file.";
         }
@@ -178,6 +179,7 @@ XML;
             logError(pg_last_error($con));
         } else {
             echo "success";
+            include("reloadxml.php");
         }
     } else if ($conference == "Video" && $callType == "Dial-OUT") {
 
@@ -301,6 +303,7 @@ XML;
         // Save
         if ($dom->save($filePath)) {
             echo "success";
+            include("reloadxml.php");
         } else {
             echo "❌ Failed to save file.";
             logError("Failed to save file " . pg_last_error($con));
