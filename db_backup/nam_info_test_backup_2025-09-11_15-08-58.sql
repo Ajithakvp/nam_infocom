@@ -1,5 +1,5 @@
 -- PostgreSQL Backup of database: nam_info_test
--- Generated on 2025-09-08 22:53:27
+-- Generated on 2025-09-11 15:08:58
 
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
@@ -266,7 +266,7 @@ DROP TABLE IF EXISTS "group_setting" CASCADE;
 CREATE TABLE "group_setting" (
     "group_number" character varying(50),
     "action_date" timestamp without time zone,
-    "id" bigint NOT NULL,
+    "id" integer DEFAULT nextval('group_setting_id_seq'::regclass) NOT NULL,
     "group_name" character varying(100),
     "conference" character varying(100),
     "user_details" character varying(4000),
@@ -289,8 +289,8 @@ CREATE TABLE "ip_setting" (
 );
 
 -- Dumping data for "ip_setting"
+INSERT INTO "ip_setting" ("ip_name","ip_address","action_date","id") VALUES ('External_Rtp_IP & Sip_IP','10.185.13.35',NULL,'5');
 INSERT INTO "ip_setting" ("ip_name","ip_address","action_date","id") VALUES ('Internal_Rtp_IP & Sip_IP','10.185.13.38',NULL,'6');
-INSERT INTO "ip_setting" ("ip_name","ip_address","action_date","id") VALUES ('External_Rtp_IP & Sip_IP','10.185.13.35.34',NULL,'5');
 
 
 -- ----------------------------
@@ -304,7 +304,7 @@ CREATE TABLE "layout_setting" (
 );
 
 -- Dumping data for "layout_setting"
-INSERT INTO "layout_setting" ("layoutnumber","action_date","id") VALUES ('8*8',NULL,'1');
+INSERT INTO "layout_setting" ("layoutnumber","action_date","id") VALUES ('7-grid-zoom',NULL,'1');
 
 
 -- ----------------------------
@@ -381,8 +381,8 @@ CREATE TABLE "port_setting" (
 INSERT INTO "port_setting" ("id","portnumber","portname","action_date") VALUES ('4','508','Internal_Sip_Port',NULL);
 INSERT INTO "port_setting" ("id","portnumber","portname","action_date") VALUES ('2','509','Internal_Tls_Port',NULL);
 INSERT INTO "port_setting" ("id","portnumber","portname","action_date") VALUES ('5','600','WSS_Port',NULL);
+INSERT INTO "port_setting" ("id","portnumber","portname","action_date") VALUES ('3','511','External_Sip_Port',NULL);
 INSERT INTO "port_setting" ("id","portnumber","portname","action_date") VALUES ('1','517','External_Tls_port',NULL);
-INSERT INTO "port_setting" ("id","portnumber","portname","action_date") VALUES ('3','5115566','External_Sip_Port',NULL);
 
 
 -- ----------------------------
@@ -411,7 +411,7 @@ CREATE TABLE "subscriber" (
 );
 
 -- Dumping data for "subscriber"
-INSERT INTO "subscriber" ("subscriber_id","password","action_date","id") VALUES ('Default','Naminfocom@123458',NULL,'1');
+INSERT INTO "subscriber" ("subscriber_id","password","action_date","id") VALUES ('Default','Naminfocom@12345',NULL,'1');
 
 
 -- ----------------------------
@@ -470,6 +470,7 @@ CREATE TABLE "subscriber_profile" (
 
 -- Dumping data for "subscriber_profile"
 INSERT INTO "subscriber_profile" ("id","first_name","last_name","subscriber_id","country_code","mobile_no","subscriber_password","activated_date","expiry_date","res_no","email","company_name","addr_1","addr_2","city","state","country","designation","area_code","office_no","extension_no","email_notification_sent","sms_notification_sent","groupid","smssent","profile","pbx","status","timezone","timedifference","gmtsign","daylightsaving","dststartmonth","dststartdate","dstendmonth","dstenddate","imsino","ipphoneno","mobileuser","landlineuser","ipphoneuser","mobionuser","license_type","days_of_validity","action_date","mobion","mobiweb") VALUES ('1',NULL,NULL,'admin',NULL,NULL,'admin',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0','Admin',NULL,'0',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO "subscriber_profile" ("id","first_name","last_name","subscriber_id","country_code","mobile_no","subscriber_password","activated_date","expiry_date","res_no","email","company_name","addr_1","addr_2","city","state","country","designation","area_code","office_no","extension_no","email_notification_sent","sms_notification_sent","groupid","smssent","profile","pbx","status","timezone","timedifference","gmtsign","daylightsaving","dststartmonth","dststartdate","dstendmonth","dstenddate","imsino","ipphoneno","mobileuser","landlineuser","ipphoneuser","mobionuser","license_type","days_of_validity","action_date","mobion","mobiweb") VALUES ('2','NAM TEST','1234','9876543102','','9876543102','9876543102','2025-09-11 00:00:00',NULL,'','test@gmail.com','testte','',NULL,'Chennai','','United States','','',NULL,'12345','1','1','','1','user','123','1','UTC−05:00',NULL,NULL,'1',NULL,NULL,NULL,NULL,NULL,'',NULL,NULL,NULL,NULL,NULL,'0','2025-09-11 12:05:27','','');
 
 
 -- ----------------------------

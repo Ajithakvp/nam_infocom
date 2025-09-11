@@ -66,8 +66,8 @@ include("chksession.php");
       <!-- Modal Body -->
       <div class="modal-body text-center p-4">
         <h6 class="fw-semibold text-dark mb-2">Configuration Settings</h6>
-        <p class="text-muted mb-1">Application UI <span class="fw-bold">v1.3.4</span></p>
-        <small class="text-secondary">Released on <span class="fw-semibold">Apr 21, 2025</span></small>
+        <p class="text-muted mb-1">Application UI <span class="fw-bold">v1.0.2</span></p>
+        <small class="text-secondary">Released on <span class="fw-semibold">Sep 11, 2025</span></small>
       </div>
 
       <!-- Modal Footer -->

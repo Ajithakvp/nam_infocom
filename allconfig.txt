@@ -16,3 +16,6 @@ PORT_SETTING_PATH=C:/Program Files/FreeSWITCH/conf/vars.xml
 LAYOUT_SETTING_PATH=C:\\Program Files\\FreeSWITCH\\conf\\autoload_configs\\conference.conf.xml
 GRP_SETTING_PATH=C:/Program Files/FreeSWITCH/conf/dialplan/default.xml
 
+;Database Backup Folder
+DB_BACKUP_PATH=db_backup
+

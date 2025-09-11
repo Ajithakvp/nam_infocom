@@ -190,7 +190,7 @@ include("config.php");
 
   <!-- Login Card -->
   <div class="login-card">
-    <h2>Hello!</h2>
+    <img src="assets/images/logos/dark-logo.png" alt="User Icon" style="width: 70%; margin-bottom: 15px;">
     <p>Sign in to your account</p>
 
     <div class="input-group">

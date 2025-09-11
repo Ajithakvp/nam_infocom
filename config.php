@@ -181,3 +181,4 @@ $fileipsettingxmlPath = $config['IP_SETTING_PATH'];
 $fileportsettingxmlPath = $config['PORT_SETTING_PATH'];
 $filelayoutsetxmlPath = $config['LAYOUT_SETTING_PATH'];
 $filegrupSettingxmlPath = $config['GRP_SETTING_PATH'];
+$db_backup_path = $config['DB_BACKUP_PATH'];

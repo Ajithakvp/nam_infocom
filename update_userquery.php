@@ -21,6 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $state = $_POST['editstate'];
     $area = $_POST['editareaCode'];
     $residence = $_POST['editresidenceNumber'];
+    $extension = $_POST['editextensionNo'];
     $profile = $_POST['editprofile'];
     $ipphone = $_POST['editipPhoneNo'];
     $mobion = $_POST['editmobion'];
@@ -28,17 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
     // Function to check if a number already exists in the database
-    function checkExistingNumber($con, $number, $field_name)
-    {
-        if ($number !== "" && $number !== "0") {
-            $sql = "SELECT 1 FROM public.subscriber_profile WHERE (mobion = $1 OR mobiweb = $1 OR pbx = $1 OR ipphoneno = $1) LIMIT 1";
-            $result = pg_query_params($con, $sql, array($number));
-            if ($result && pg_num_rows($result) > 0) {
-                echo "Already added this Number, Please change the {$field_name} field";
-                exit;
-            }
-        }
-    }
+
 
 
 
@@ -50,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $versql = "SELECT id FROM public.subscriber_profile WHERE first_name=$1 AND last_name=$2 AND email=$3 AND mobile_no=$4 AND country=$5 AND 
               subscriber_id=$6 AND subscriber_password=$7 AND timezone=$8 AND groupid=$9 AND pbx=$10 AND 
               company_name=$11 AND designation=$12 AND addr_1=$13 AND city=$14 AND state=$15 AND area_code=$16 AND 
-              res_no=$17 AND profile=$18 AND ipphoneno=$19 AND mobion=$20 AND mobiweb=$21";
+              res_no=$17 AND profile=$18 AND ipphoneno=$19 AND mobion=$20 AND mobiweb=$21 AND extension_no=$22 AND id = $23";
 
     $chkparams = [
         $first,
@@ -73,27 +64,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $profile,
         $ipphone,
         $mobion,
-        $mobiweb
+        $mobiweb,
+        $extension,
+        $id
     ];
 
     $verres = pg_query_params($con, $versql, $chkparams);
     if (pg_num_rows($verres) > 0) {
         echo "No changes made";
         exit;
-    } else {
-        // Check each field
-        checkExistingNumber($con, $pbx, 'PBX');
-        checkExistingNumber($con, $mobion, 'Mobion');
-        checkExistingNumber($con, $mobiweb, 'MobiWeb');
-        checkExistingNumber($con, $ipphone, 'IP Phone');
     }
 
     $sql = "UPDATE public.subscriber_profile SET
               first_name=$1,last_name=$2,email=$3,mobile_no=$4,country=$5,
               subscriber_id=$6,subscriber_password=$7,timezone=$8,groupid=$9,pbx=$10,
               company_name=$11,designation=$12,addr_1=$13,city=$14,state=$15,area_code=$16,
-              res_no=$17,profile=$18,ipphoneno=$19,mobion=$20,mobiweb=$21
-            WHERE id=$22";
+              res_no=$17,profile=$18,ipphoneno=$19,mobion=$20,mobiweb=$21, extension_no=$22
+            WHERE id=$23";
 
     $params = [
         $first,
@@ -117,6 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $ipphone,
         $mobion,
         $mobiweb,
+        $extension,
         $id
     ];
 

@@ -131,6 +131,7 @@ header("Pragma: no-cache");
                 <th>State</th>
                 <th>Area Code</th>
                 <th>Residence Number</th>
+                <th>Extension Number</th>
                 <th>Profile</th>
                 <th>IP Phone No</th>
                 <th>Mobion</th>
@@ -171,6 +172,7 @@ header("Pragma: no-cache");
                           data-state="<?php echo $row['state']; ?>"
                           data-area="<?php echo $row['area_code']; ?>"
                           data-residence="<?php echo $row['res_no']; ?>"
+                          data-ext="<?php echo $row['extension_no']; ?>"
                           data-profile="<?php echo $row['profile']; ?>"
                           data-ipphone="<?php echo $row['ipphoneno']; ?>"
                           data-mobion="<?php echo $row['mobion']; ?>"
@@ -200,6 +202,7 @@ header("Pragma: no-cache");
                     <td><?php echo $row['state']; ?></td>
                     <td><?php echo $row['area_code']; ?></td>
                     <td><?php echo $row['res_no']; ?></td>
+                    <td><?php echo $row['extension_no']; ?></td>
                     <td><?php echo $row['profile']; ?></td>
                     <td><?php echo $row['ipphoneno']; ?></td>
                     <td><?php echo $row['mobion']; ?></td>
@@ -238,13 +241,13 @@ header("Pragma: no-cache");
 
               <!-- First Column -->
               <div class="col-md-3">
-                <label for="addfirstName" class="form-label">First Name <span class="text-danger">*</span></label>
+                <label for="addfirstName" class="form-label">First Name <span class="text-danger" style="font-size: large;">*</span></label>
                 <input type="text" class="form-control" id="addfirstName" name="addfirstName" placeholder="Firstname"
                   required>
               </div>
 
               <div class="col-md-3">
-                <label for="addlastName" class="form-label">Last Name <span class="text-danger">*</span></label>
+                <label for="addlastName" class="form-label">Last Name <span class="text-danger" style="font-size: large;">*</span></label>
                 <input type="text" class="form-control" id="addlastName" name="addlastName" placeholder="Lastname" required>
               </div>
 
@@ -254,14 +257,14 @@ header("Pragma: no-cache");
               </div>
 
               <div class="col-md-3">
-                <label for="addmobileNo" class="form-label">Mobile No <span class="text-danger">*</span></label>
+                <label for="addmobileNo" class="form-label">Mobile No <span class="text-danger" style="font-size: large;">*</span></label>
                 <input type="text" class="form-control" id="addmobileNo" name="addmobileNo" placeholder="MobileNo" required>
                 <span id="addmobileNoError" style="color:red;display:none;font-size:14px;"></span>
 
               </div>
 
               <div class="col-md-3">
-                <label for="addcountry" class="form-label">Country <span class="text-danger">*</span></label>
+                <label for="addcountry" class="form-label">Country <span class="text-danger" style="font-size: large;">*</span></label>
                 <select id="addcountry" name="addcountry" class="form-select" style="width: 100%;" required>
                   <option value="">--Select country--</option>
                 </select>
@@ -270,14 +273,14 @@ header("Pragma: no-cache");
               <input type="hidden" id="addcountrycode" />
 
               <div class="col-md-3">
-                <label for="adduserId" class="form-label">User ID <span class="text-danger">*</span></label>
+                <label for="adduserId" class="form-label">User ID <span class="text-danger" style="font-size: large;">*</span></label>
                 <input type="text" class="form-control" id="adduserId" name="adduserId" placeholder="UserId" required>
                 <span id="userIdError" style="color:red;display:none;font-size:14px;"></span>
 
               </div>
 
               <div class="col-md-3">
-                <label for="addpassword" class="form-label">Password <span class="text-danger">*</span></label>
+                <label for="addpassword" class="form-label">Password <span class="text-danger" style="font-size: large;">*</span></label>
                 <input type="password" class="form-control" id="addpassword" name="addpassword" placeholder="Password"
                   required>
                 <span id="passwordError" style="color:red;display:none;font-size:14px;"></span>
@@ -285,7 +288,7 @@ header("Pragma: no-cache");
               </div>
 
               <div class="col-md-3">
-                <label for="addtimezone" class="form-label">Timezone <span class="text-danger">*</span></label>
+                <label for="addtimezone" class="form-label">Timezone <span class="text-danger" style="font-size: large;">*</span></label>
                 <input type="text" class="form-control" id="addtimezone" name="addtimezone" placeholder="Timezone" required>
               </div>
 
@@ -315,7 +318,7 @@ header("Pragma: no-cache");
               </div>
 
               <div class="col-md-3">
-                <label for="addcity" class="form-label">City <span class="text-danger">*</span></label>
+                <label for="addcity" class="form-label">City <span class="text-danger" style="font-size: large;">*</span></label>
                 <input type="text" class="form-control" id="addcity" name="addcity" placeholder="City" required>
               </div>
 
@@ -399,13 +402,13 @@ header("Pragma: no-cache");
 
               <!-- First Column -->
               <div class="col-md-3">
-                <label for="editfirstName" class="form-label">First Name <span class="text-danger">*</span></label>
+                <label for="editfirstName" class="form-label">First Name <span class="text-danger" style="font-size: large;">*</span></label>
                 <input type="text" class="form-control" id="editfirstName" name="editfirstName" placeholder="Firstname"
                   required>
               </div>
 
               <div class="col-md-3">
-                <label for="editlastName" class="form-label">Last Name <span class="text-danger">*</span></label>
+                <label for="editlastName" class="form-label">Last Name <span class="text-danger" style="font-size: large;">*</span></label>
                 <input type="text" class="form-control" id="editlastName" name="editlastName" placeholder="Lastname" required>
               </div>
 
@@ -415,14 +418,14 @@ header("Pragma: no-cache");
               </div>
 
               <div class="col-md-3">
-                <label for="editmobileNo" class="form-label">Mobile No <span class="text-danger">*</span></label>
+                <label for="editmobileNo" class="form-label">Mobile No <span class="text-danger" style="font-size: large;">*</span></label>
                 <input type="text" class="form-control" id="editmobileNo" name="editmobileNo" placeholder="MobileNo" required>
                 <span id="editmobileNoError" style="color:red;display:none;font-size:14px;"></span>
 
               </div>
 
               <div class="col-md-3">
-                <label for="editcountry" class="form-label">Country <span class="text-danger">*</span></label>
+                <label for="editcountry" class="form-label">Country <span class="text-danger" style="font-size: large;">*</span></label>
                 <select id="editcountry" name="editcountry" class="form-select" style="width: 100%;" required>
                   <option value="">--Select country--</option>
                 </select>
@@ -430,18 +433,18 @@ header("Pragma: no-cache");
               <input type="hidden" id="editcountrycode" />
 
               <div class="col-md-3">
-                <label for="edituserId" class="form-label">User ID <span class="text-danger">*</span></label>
+                <label for="edituserId" class="form-label">User ID <span class="text-danger" style="font-size: large;">*</span></label>
                 <input type="text" class="form-control" id="edituserId" name="edituserId" placeholder="UserId" required disabled>
               </div>
 
               <div class="col-md-3">
-                <label for="editpassword" class="form-label">Password <span class="text-danger">*</span></label>
+                <label for="editpassword" class="form-label">Password <span class="text-danger" style="font-size: large;">*</span></label>
                 <input type="password" class="form-control" id="editpassword" name="editpassword" placeholder="Password"
                   required>
               </div>
 
               <div class="col-md-3">
-                <label for="edittimezone" class="form-label">Timezone <span class="text-danger">*</span></label>
+                <label for="edittimezone" class="form-label">Timezone <span class="text-danger" style="font-size: large;">*</span></label>
                 <input type="text" class="form-control" id="edittimezone" name="edittimezone" placeholder="Timezone" required>
               </div>
 
@@ -471,7 +474,7 @@ header("Pragma: no-cache");
               </div>
 
               <div class="col-md-3">
-                <label for="editcity" class="form-label">City <span class="text-danger">*</span></label>
+                <label for="editcity" class="form-label">City <span class="text-danger" style="font-size: large;">*</span></label>
                 <input type="text" class="form-control" id="editcity" name="editcity" placeholder="City" required>
               </div>
 
@@ -617,7 +620,6 @@ header("Pragma: no-cache");
 
       function validateadduseridForm() {
         let userValid = false;
-        let passValid = false;
 
         // Validate User ID (numbers only, length 4–50)
         let userId = $("#adduserId").val().trim();
@@ -635,6 +637,21 @@ header("Pragma: no-cache");
           $("#adduserId").css("border-color", "green");
           userValid = true;
         }
+
+
+        // Enable/Disable Submit
+        if (userValid) {
+          $("#saveUser").prop("disabled", false);
+        } else {
+          $("#saveUser").prop("disabled", true);
+        }
+      }
+
+
+      function validatepassForm() {
+        let passValid = false;
+
+
 
         // Validate Password (alphanumeric + special chars, length 4–50)
         let password = $("#addpassword").val().trim();
@@ -654,7 +671,7 @@ header("Pragma: no-cache");
         }
 
         // Enable/Disable Submit
-        if (userValid && passValid) {
+        if (passValid) {
           $("#saveUser").prop("disabled", false);
         } else {
           $("#saveUser").prop("disabled", true);
@@ -662,7 +679,9 @@ header("Pragma: no-cache");
       }
 
       // Run validation on input
-      $("#adduserId, #addpassword").on("input", validateadduseridForm);
+      $("#addpassword").on("input", validatepassForm);
+      $("#adduserId").on("input", validateadduseridForm);
+
 
 
       // Initialize DataTable
@@ -1166,6 +1185,7 @@ header("Pragma: no-cache");
           document.getElementById("editstate").value = this.dataset.state;
           document.getElementById("editareaCode").value = this.dataset.area;
           document.getElementById("editresidenceNumber").value = this.dataset.residence;
+          document.getElementById("editextensionNo").value = this.dataset.ext;
           document.getElementById("editprofile").value = this.dataset.profile;
           document.getElementById("editipPhoneNo").value = this.dataset.ipphone;
           document.getElementById("editmobion").value = this.dataset.mobion;
@@ -1223,7 +1243,6 @@ header("Pragma: no-cache");
 
 
   <script>
-    // Get all three input fields
     const ipPhoneInput = document.getElementById('addipPhoneNo');
     const mobionInput = document.getElementById('addmobion');
     const mobiwebInput = document.getElementById('addmobiweb');
@@ -1231,77 +1250,111 @@ header("Pragma: no-cache");
 
     const allInputs = [ipPhoneInput, mobionInput, mobiwebInput, pbxnoInput];
 
-    // Function to validate for duplicate values
+    // Validate for exact duplicates only
     function validateUniqueValues(currentInput) {
       const currentValue = currentInput.value.trim();
+      if (currentValue === '') return; // skip empty entries
 
-      // Loop through all inputs to check for duplicates
       allInputs.forEach(input => {
-        // Don't compare an input with itself
-        if (input !== currentInput) {
-          // If a duplicate is found
-          if (input.value.trim() === currentValue && currentValue !== '') {
-            //alert(`Value "${currentValue}" has already been entered in the "${input.name}" field.`);
-            if (input.name == "addipPhoneNo")
-              alert(`Value "${currentValue}" has already been entered in the IP Phone No field.`);
-            else if (input.name == "addmobion")
-              alert(`Value "${currentValue}" has already been entered in the Mobion field.`);
-            else if (input.name == "addmobiweb")
-              alert(`Value "${currentValue}" has already been entered in the Mobiweb field.`);
-            else if (input.name == "addpbxNo")
-              alert(`Value "${currentValue}" has already been entered in the Pbx No field.`);
-            currentInput.value = ''; // Clear the input field
+        if (input !== currentInput && input.value.trim() === currentValue) {
+          // Identify which field already has the value
+          let fieldName = '';
+          switch (input.name) {
+            case 'addipPhoneNo':
+              fieldName = 'IP Phone No';
+              break;
+            case 'addmobion':
+              fieldName = 'Mobion';
+              break;
+            case 'addmobiweb':
+              fieldName = 'Mobiweb';
+              break;
+            case 'addpbxNo':
+              fieldName = 'PBX No';
+              break;
           }
+          alert(`Value "${currentValue}" has already been entered in the ${fieldName} field.`);
+          currentInput.value = ''; // clear duplicate
         }
       });
     }
 
-    // Add event listeners to all three fields
+    // Validate only after the user leaves the input
     allInputs.forEach(input => {
-      input.addEventListener('input', () => {
-        validateUniqueValues(input);
-      });
+      input.addEventListener('blur', () => validateUniqueValues(input));
     });
   </script>
 
   <script>
-    // Get all three input fields
-    const editiphoneno = document.getElementById('editipPhoneNo');
-    const editmobionInput = document.getElementById('editmobion');
-    const editmobiwebInput = document.getElementById('editmobiweb');
-    const editpbxnoInput = document.getElementById('editpbxNo');
+    // robust duplicate-check for the "edit" fields (alerts on blur, exact match only)
+    document.addEventListener('DOMContentLoaded', () => {
+      const ids = ['editipPhoneNo', 'editmobion', 'editmobiweb', 'editpbxNo'];
+      // grab elements, ignore missing ones
+      const inputs = ids.map(id => document.getElementById(id)).filter(Boolean);
 
-    const editallInputs = [editiphoneno, editmobionInput, editmobiwebInput, editpbxnoInput];
+      if (inputs.length === 0) {
+        console.warn('Duplicate-check: no edit inputs found (check IDs)');
+        return;
+      }
 
-    // Function to validate for duplicate values
-    function editvalidateUniqueValues(currentInput) {
-      const currentValue = currentInput.value.trim();
+      // friendly label resolver (priority: data-label -> placeholder -> id map -> name -> id)
+      const idLabelMap = {
+        editipPhoneNo: 'IP Phone No',
+        editmobion: 'Mobion',
+        editmobiweb: 'Mobiweb',
+        editpbxNo: 'PBX No'
+      };
+      const getLabel = input =>
+        (input.dataset && input.dataset.label) ||
+        input.placeholder ||
+        idLabelMap[input.id] ||
+        input.name ||
+        input.id;
 
-      // Loop through all inputs to check for duplicates
-      editallInputs.forEach(input => {
-        // Don't compare an input with itself
-        if (input !== currentInput) {
-          // If a duplicate is found
-          if (input.value.trim() === currentValue && currentValue !== '') {
-            if (input.name == "editipPhoneNo")
-              alert(`Value "${currentValue}" has already been entered in the IP Phone No field.`);
-            else if (input.name == "editmobion")
-              alert(`Value "${currentValue}" has already been entered in the Mobion field.`);
-            else if (input.name == "editmobiweb")
-              alert(`Value "${currentValue}" has already been entered in the Mobiweb field.`);
-            else if (input.name == "editpbxNo")
-              alert(`Value "${currentValue}" has already been entered in the Pbx No field.`);
-            currentInput.value = ''; // Clear the input field
+      // normalized exact compare (trimmed). If you want case-insensitive for text, add .toLowerCase()
+      const normalize = v => (v || '').trim();
+
+      function validateDuplicate(currentInput) {
+        const cur = normalize(currentInput.value);
+        if (cur === '') return; // ignore empty values
+
+        for (const other of inputs) {
+          if (other === currentInput) continue;
+          if (normalize(other.value) === cur) {
+            const label = getLabel(other);
+            alert(`Value "${cur}" has already been entered in the ${label} field.`);
+            // clear and return focus so user can re-enter
+            currentInput.value = '';
+            // refocus asynchronously to avoid focus-blur loop
+            setTimeout(() => currentInput.focus(), 0);
+            return;
           }
         }
-      });
-    }
+      }
 
-    // Add event listeners to all three fields
-    editallInputs.forEach(input => {
-      input.addEventListener('input', () => {
-        editvalidateUniqueValues(input);
+      // attach once for existing inputs
+      inputs.forEach(input => {
+        // use 'blur' so alert appears after user finishes typing and leaves field
+        input.addEventListener('blur', (e) => validateDuplicate(e.target));
       });
+
+      // If your edit form is inside a Bootstrap modal (or the inputs are created dynamically),
+      // re-attach on modal show to ensure listeners are present.
+      // (This part is safe even if you don't use modals.)
+      document.querySelectorAll('.modal').forEach(modalEl => {
+        modalEl.addEventListener('shown.bs.modal', () => {
+          ids.forEach(id => {
+            const el = document.getElementById(id);
+            if (el && !el.dataset._dupAttached) {
+              el.addEventListener('blur', (e) => validateDuplicate(e.target));
+              el.dataset._dupAttached = '1';
+            }
+          });
+        });
+      });
+
+      // Optional: quick debug helper, uncomment to log comparisons
+      // window._debugDuplicateCheck = () => inputs.forEach(i => console.log(i.id, i.value));
     });
   </script>
 

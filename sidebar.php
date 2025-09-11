@@ -11,10 +11,10 @@
     </div>
 
     <!-- Search -->
-    <label class="search" title="Search">
+    <!-- <label class="search" title="Search">
       <i class='ti ti-search'></i>
       <input type="text" id="searchInput" placeholder="Search..." />
-    </label>
+    </label> -->
 
     <!-- Sidebar navigation-->
     <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
@@ -35,7 +35,7 @@
           <li class="sidebar-item">
             <a class="sidebar-link" href="subscribes_id.php">
               <span><i class="ti ti-id-badge-2"></i></span>
-              <span class="hide-menu">Subscribes ID</span>
+              <span class="hide-menu">Subscriber ID</span>
             </a>
           </li>
         <?php } ?>
@@ -162,62 +162,60 @@
   }
 </style>
 <script>
-window.addEventListener('load', () => {
-  const links = Array.from(document.querySelectorAll('#sidebarnav a.sidebar-link'));
-  // remove any existing active/selected (defensive)
-  links.forEach(a => a.classList.remove('active'));
-  document.querySelectorAll('#sidebarnav li').forEach(li => li.classList.remove('selected'));
+  window.addEventListener('load', () => {
+    const links = Array.from(document.querySelectorAll('#sidebarnav a.sidebar-link'));
+    links.forEach(a => a.classList.remove('active'));
+    document.querySelectorAll('#sidebarnav li').forEach(li => li.classList.remove('selected'));
 
-  const normalize = s => (s || '').toString().toLowerCase().replace(/^\/+|\/+$/g, '');
-  const curPath = normalize(window.location.pathname);
-  const curFile = (curPath.split('/').filter(Boolean).pop() || 'add_user.php').toLowerCase();
+    const normalize = s => (s || '').toLowerCase().replace(/^\/+|\/+$/g, '');
+    const curPath = normalize(window.location.pathname);
+    const curFile = curPath.split('/').filter(Boolean).pop() || '';
 
-  let bestLink = null;
-  let bestScore = -1;
+    let bestLink = null;
+    let bestScore = -1;
 
-  links.forEach(link => {
-    const rawHref = link.getAttribute('href') || '';
-    if (!rawHref || rawHref.startsWith('#') || rawHref.startsWith('javascript:')) return;
+    links.forEach(link => {
+      const rawHref = link.getAttribute('href');
+      if (!rawHref || rawHref.startsWith('#') || rawHref.startsWith('javascript:')) return;
 
-    let url;
-    try {
-      url = new URL(rawHref, window.location.href);
-    } catch (e) {
-      return;
+      let url;
+      try {
+        url = new URL(rawHref, window.location.href);
+      } catch (e) {
+        return;
+      }
+
+      const hrefPath = normalize(url.pathname);
+      const hrefFile = hrefPath.split('/').filter(Boolean).pop() || '';
+
+      let score = -1;
+      if (hrefFile && hrefFile === curFile) score = 100; // exact file match
+      else if (hrefPath && hrefPath === curPath) score = 90; // exact path match
+      else if ((url.origin + url.pathname) === window.location.href.split('?')[0]) score = 95;
+      else if (hrefFile && curPath.includes(hrefFile)) score = 40; // less aggressive partial match
+
+      if (score > 0) score += Math.min(20, hrefPath.length / 5);
+      if (score > bestScore) {
+        bestScore = score;
+        bestLink = link;
+      }
+    });
+
+    // Only fall back if nothing scored at all
+    if (!bestLink && curFile === '') {
+      bestLink = document.querySelector('#sidebarnav a[href="add_user.php"], #sidebarnav a[href="/add_user.php"]');
     }
 
-    const hrefPath = normalize(url.pathname);
-    const hrefFile = hrefPath.split('/').filter(Boolean).pop() || '';
-
-    // scoring: higher is better
-    let score = -1;
-    if (hrefFile && hrefFile === curFile) score = 100;             // exact filename
-    else if (hrefPath && hrefPath === curPath) score = 90;        // exact pathname
-    else if (window.location.href.split('?')[0] === (url.origin + url.pathname)) score = 95; // exact URL without query
-    else if (hrefFile && window.location.href.toLowerCase().includes(hrefFile)) score = 50;    // partial match
-    // small tiebreaker: prefer longer path (more specific)
-    if (score > 0) score += Math.min(20, hrefPath.length / 5);
-
-    if (score > bestScore) {
-      bestScore = score;
-      bestLink = link;
+    if (bestLink) {
+      bestLink.classList.add('active');
+      const li = bestLink.closest('li');
+      if (li) li.classList.add('selected');
+      setTimeout(() => {
+        bestLink.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        });
+      }, 150);
     }
   });
-
-  // final fallback -> add_user.php link
-  if (!bestLink) {
-    bestLink = document.querySelector('#sidebarnav a[href="add_user.php"], #sidebarnav a[href="/add_user.php"]');
-  }
-
-  if (bestLink) {
-    bestLink.classList.add('active');
-    const li = bestLink.closest('li');
-    if (li) li.classList.add('selected');
-
-    // scroll into view (small delay so rendering is stable)
-    setTimeout(() => bestLink.scrollIntoView({ behavior: 'smooth', block: 'center' }), 150);
-  }
-});
 </script>
-
-
