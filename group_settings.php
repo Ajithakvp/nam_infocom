@@ -230,7 +230,7 @@ $ctbl = tablecheck($con, "group_setting"); ?>
               <!-- Group Name -->
               <div class="col-md-6">
                 <label for="editgroupName" class="form-label">Group Name</label>
-                <input type="text" class="form-control" id="editgroupName" name="editgroupName" required disabled>
+                <input type="text" class="form-control" id="editgroupName" name="editgroupName" required disabled maxlength="100">
               </div>
 
               <!-- Group Number -->
@@ -322,7 +322,7 @@ $ctbl = tablecheck($con, "group_setting"); ?>
               <!-- Group Name -->
               <div class="col-md-6">
                 <label for="addgroupName" class="form-label">Group Name</label>
-                <input type="text" class="form-control" id="addgroupName" name="addgroupName" required>
+                <input type="text" class="form-control" id="addgroupName" name="addgroupName" required maxlength="100">
               </div>
 
               <!-- Group Number -->

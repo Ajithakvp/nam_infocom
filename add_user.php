@@ -242,23 +242,23 @@ header("Pragma: no-cache");
               <!-- First Column -->
               <div class="col-md-3">
                 <label for="addfirstName" class="form-label">First Name <span class="text-danger" style="font-size: large;">*</span></label>
-                <input type="text" class="form-control" id="addfirstName" name="addfirstName" placeholder="Firstname"
+                <input type="text" class="form-control" id="addfirstName" name="addfirstName" placeholder="Firstname" maxlength="100"
                   required>
               </div>
 
               <div class="col-md-3">
                 <label for="addlastName" class="form-label">Last Name <span class="text-danger" style="font-size: large;">*</span></label>
-                <input type="text" class="form-control" id="addlastName" name="addlastName" placeholder="Lastname" required>
+                <input type="text" class="form-control" id="addlastName" name="addlastName" placeholder="Lastname" maxlength="100" required>
               </div>
 
               <div class="col-md-3">
                 <label for="addemail" class="form-label">Email</label>
-                <input type="email" class="form-control" id="addemail" name="addemail" placeholder="Email">
+                <input type="email" class="form-control" id="addemail" name="addemail" placeholder="Email" maxlength="100">
               </div>
 
               <div class="col-md-3">
                 <label for="addmobileNo" class="form-label">Mobile No <span class="text-danger" style="font-size: large;">*</span></label>
-                <input type="text" class="form-control" id="addmobileNo" name="addmobileNo" placeholder="MobileNo" required>
+                <input type="text" class="form-control" id="addmobileNo" name="addmobileNo" placeholder="MobileNo" maxlength="15" required>
                 <span id="addmobileNoError" style="color:red;display:none;font-size:14px;"></span>
 
               </div>
@@ -274,14 +274,14 @@ header("Pragma: no-cache");
 
               <div class="col-md-3">
                 <label for="adduserId" class="form-label">User ID <span class="text-danger" style="font-size: large;">*</span></label>
-                <input type="text" class="form-control" id="adduserId" name="adduserId" placeholder="UserId" required>
+                <input type="text" class="form-control" id="adduserId" name="adduserId" placeholder="UserId" maxlength="50" required>
                 <span id="userIdError" style="color:red;display:none;font-size:14px;"></span>
 
               </div>
 
               <div class="col-md-3">
                 <label for="addpassword" class="form-label">Password <span class="text-danger" style="font-size: large;">*</span></label>
-                <input type="password" class="form-control" id="addpassword" name="addpassword" placeholder="Password"
+                <input type="password" class="form-control" id="addpassword" name="addpassword" placeholder="Password" maxlength="50"
                   required>
                 <span id="passwordError" style="color:red;display:none;font-size:14px;"></span>
 
@@ -294,55 +294,55 @@ header("Pragma: no-cache");
 
               <div class="col-md-3">
                 <label for="addgroupId" class="form-label">Group ID</label>
-                <input type="text" class="form-control" id="addgroupId" name="addgroupId" placeholder="GroupID">
+                <input type="text" class="form-control" id="addgroupId" name="addgroupId" placeholder="GroupID" maxlength="50">
               </div>
 
               <div class="col-md-3">
                 <label for="addpbxNo" class="form-label">PBX No</label>
-                <input type="text" class="form-control" id="addpbxNo" name="addpbxNo" placeholder="PBX No">
+                <input type="text" class="form-control" id="addpbxNo" name="addpbxNo" placeholder="PBX No" maxlength="20">
               </div>
 
               <div class="col-md-3">
                 <label for="addcompanyName" class="form-label">Company Name</label>
-                <input type="text" class="form-control" id="addcompanyName" name="addcompanyName" placeholder="CompanyName">
+                <input type="text" class="form-control" id="addcompanyName" name="addcompanyName" placeholder="CompanyName" maxlength="100">
               </div>
 
               <div class="col-md-3">
                 <label for="adddesignation" class="form-label">Designation</label>
-                <input type="text" class="form-control" id="adddesignation" name="adddesignation" placeholder="Designation">
+                <input type="text" class="form-control" id="adddesignation" name="adddesignation" placeholder="Designation" maxlength="100">
               </div>
 
               <div class="col-md-3">
                 <label for="addaddress" class="form-label">Address</label>
-                <input type="text" class="form-control" id="addaddress" name="addaddress" placeholder="Address">
+                <input type="text" class="form-control" id="addaddress" name="addaddress" placeholder="Address" maxlength="100">
               </div>
 
               <div class="col-md-3">
                 <label for="addcity" class="form-label">City <span class="text-danger" style="font-size: large;">*</span></label>
-                <input type="text" class="form-control" id="addcity" name="addcity" placeholder="City" required>
+                <input type="text" class="form-control" id="addcity" name="addcity" placeholder="City" required maxlength="100">
               </div>
 
               <div class="col-md-3">
                 <label for="addstate" class="form-label">State</label>
-                <input type="text" class="form-control" id="addstate" name="addstate" placeholder="State">
+                <input type="text" class="form-control" id="addstate" name="addstate" placeholder="State" maxlength="100">
               </div>
 
               <div class="col-md-3">
                 <label for="addareaCode" class="form-label">Area Code</label>
-                <input type="text" class="form-control" id="addareaCode" name="addareaCode" placeholder="AreaCode">
+                <input type="text" class="form-control" id="addareaCode" name="addareaCode" placeholder="AreaCode" maxlength="20">
               </div>
 
               <div class="col-md-3">
                 <label for="addresidenceNumber" class="form-label">Residence Number</label>
                 <input type="text" class="form-control" id="addresidenceNumber" name="addresidenceNumber"
-                  placeholder="Residencenumber">
+                  placeholder="Residencenumber" maxlength="20">
                 <span id="addresidenceNumberError" style="color:red;display:none;font-size:14px;"></span>
 
               </div>
 
               <div class="col-md-3">
                 <label for="addextensionNo" class="form-label">Extension No</label>
-                <input type="text" class="form-control" id="addextensionNo" name="addextensionNo" placeholder="ExtensionNo">
+                <input type="text" class="form-control" id="addextensionNo" name="addextensionNo" placeholder="ExtensionNo" maxlength="20">
                 <span id="addextensionNoError" style="color:red;display:none;font-size:14px;"></span>
 
               </div>
@@ -358,19 +358,19 @@ header("Pragma: no-cache");
 
               <div class="col-md-3">
                 <label for="addipPhoneNo" class="form-label">IP Phone No</label>
-                <input type="text" class="form-control" id="addipPhoneNo" name="addipPhoneNo" placeholder="IPPhoneNo">
+                <input type="text" class="form-control" id="addipPhoneNo" name="addipPhoneNo" placeholder="IPPhoneNo" maxlength="20">
                 <span id="addipPhoneNoError" style="color:red;display:none;font-size:14px;"></span>
 
               </div>
 
               <div class="col-md-3">
                 <label for="addmobion" class="form-label">Mobion</label>
-                <input type="text" class="form-control" id="addmobion" name="addmobion" placeholder="Mobion">
+                <input type="text" class="form-control" id="addmobion" name="addmobion" placeholder="Mobion" maxlength="20">
               </div>
 
               <div class="col-md-3">
                 <label for="addmobiweb" class="form-label">Mobiweb</label>
-                <input type="text" class="form-control" id="addmobiweb" name="addmobiweb" placeholder="Mobiweb">
+                <input type="text" class="form-control" id="addmobiweb" name="addmobiweb" placeholder="Mobiweb" maxlength="20">
               </div>
 
             </div>
@@ -403,23 +403,23 @@ header("Pragma: no-cache");
               <!-- First Column -->
               <div class="col-md-3">
                 <label for="editfirstName" class="form-label">First Name <span class="text-danger" style="font-size: large;">*</span></label>
-                <input type="text" class="form-control" id="editfirstName" name="editfirstName" placeholder="Firstname"
+                <input type="text" class="form-control" id="editfirstName" name="editfirstName" placeholder="Firstname" maxlength="100"
                   required>
               </div>
 
               <div class="col-md-3">
                 <label for="editlastName" class="form-label">Last Name <span class="text-danger" style="font-size: large;">*</span></label>
-                <input type="text" class="form-control" id="editlastName" name="editlastName" placeholder="Lastname" required>
+                <input type="text" class="form-control" id="editlastName" name="editlastName" placeholder="Lastname" required maxlength="100">
               </div>
 
               <div class="col-md-3">
                 <label for="editemail" class="form-label">Email</label>
-                <input type="email" class="form-control" id="editemail" name="editemail" placeholder="Email">
+                <input type="email" class="form-control" id="editemail" name="editemail" placeholder="Email" maxlength="100">
               </div>
 
               <div class="col-md-3">
                 <label for="editmobileNo" class="form-label">Mobile No <span class="text-danger" style="font-size: large;">*</span></label>
-                <input type="text" class="form-control" id="editmobileNo" name="editmobileNo" placeholder="MobileNo" required>
+                <input type="text" class="form-control" id="editmobileNo" name="editmobileNo" placeholder="MobileNo" required maxlength="15">
                 <span id="editmobileNoError" style="color:red;display:none;font-size:14px;"></span>
 
               </div>
@@ -434,12 +434,12 @@ header("Pragma: no-cache");
 
               <div class="col-md-3">
                 <label for="edituserId" class="form-label">User ID <span class="text-danger" style="font-size: large;">*</span></label>
-                <input type="text" class="form-control" id="edituserId" name="edituserId" placeholder="UserId" required disabled>
+                <input type="text" class="form-control" id="edituserId" name="edituserId" placeholder="UserId" required disabled maxlength="50">
               </div>
 
               <div class="col-md-3">
                 <label for="editpassword" class="form-label">Password <span class="text-danger" style="font-size: large;">*</span></label>
-                <input type="password" class="form-control" id="editpassword" name="editpassword" placeholder="Password"
+                <input type="password" class="form-control" id="editpassword" name="editpassword" placeholder="Password" maxlength="50"
                   required>
               </div>
 
@@ -450,55 +450,55 @@ header("Pragma: no-cache");
 
               <div class="col-md-3">
                 <label for="editgroupId" class="form-label">Group ID</label>
-                <input type="text" class="form-control" id="editgroupId" name="editgroupId" placeholder="GroupID">
+                <input type="text" class="form-control" id="editgroupId" name="editgroupId" placeholder="GroupID" maxlength="100">
               </div>
 
               <div class="col-md-3">
                 <label for="editpbxNo" class="form-label">PBX No</label>
-                <input type="text" class="form-control" id="editpbxNo" name="editpbxNo" placeholder="PBXNo">
+                <input type="text" class="form-control" id="editpbxNo" name="editpbxNo" placeholder="PBXNo" maxlength="20">
               </div>
 
               <div class="col-md-3">
                 <label for="editcompanyName" class="form-label">Company Name</label>
-                <input type="text" class="form-control" id="editcompanyName" name="editcompanyName" placeholder="CompanyName">
+                <input type="text" class="form-control" id="editcompanyName" name="editcompanyName" placeholder="CompanyName" maxlength="100">
               </div>
 
               <div class="col-md-3">
                 <label for="editdesignation" class="form-label">Designation</label>
-                <input type="text" class="form-control" id="editdesignation" name="editdesignation" placeholder="Designation">
+                <input type="text" class="form-control" id="editdesignation" name="editdesignation" placeholder="Designation" maxlength="100">
               </div>
 
               <div class="col-md-3">
                 <label for="editaddress" class="form-label">Address</label>
-                <input type="text" class="form-control" id="editaddress" name="editaddress" placeholder="Address">
+                <input type="text" class="form-control" id="editaddress" name="editaddress" placeholder="Address" maxlength="100">
               </div>
 
               <div class="col-md-3">
                 <label for="editcity" class="form-label">City <span class="text-danger" style="font-size: large;">*</span></label>
-                <input type="text" class="form-control" id="editcity" name="editcity" placeholder="City" required>
+                <input type="text" class="form-control" id="editcity" name="editcity" placeholder="City" required maxlength="100">
               </div>
 
               <div class="col-md-3">
                 <label for="editstate" class="form-label">State</label>
-                <input type="text" class="form-control" id="editstate" name="editstate" placeholder="State">
+                <input type="text" class="form-control" id="editstate" name="editstate" placeholder="State" maxlength="100">
               </div>
 
               <div class="col-md-3">
                 <label for="editareaCode" class="form-label">Area Code</label>
-                <input type="text" class="form-control" id="editareaCode" name="editareaCode" placeholder="AreaCode">
+                <input type="text" class="form-control" id="editareaCode" name="editareaCode" placeholder="AreaCode" maxlength="20">
               </div>
 
               <div class="col-md-3">
                 <label for="editresidenceNumber" class="form-label">Residence Number</label>
                 <input type="text" class="form-control" id="editresidenceNumber" name="editresidenceNumber"
-                  placeholder="Residencenumber">
+                  placeholder="Residencenumber" maxlength="20">
                 <span id="editresidenceNumberError" style="color:red;display:none;font-size:14px;"></span>
 
               </div>
 
               <div class="col-md-3">
                 <label for="editextensionNo" class="form-label">Extension No</label>
-                <input type="text" class="form-control" id="editextensionNo" name="editextensionNo" placeholder="ExtensionNo">
+                <input type="text" class="form-control" id="editextensionNo" name="editextensionNo" placeholder="ExtensionNo" maxlength="20">
                 <span id="editextensionNoError" style="color:red;display:none;font-size:14px;"></span>
 
               </div>
@@ -513,19 +513,19 @@ header("Pragma: no-cache");
 
               <div class="col-md-3">
                 <label for="editipPhoneNo" class="form-label">IP Phone No</label>
-                <input type="text" class="form-control" id="editipPhoneNo" name="editipPhoneNo" placeholder="IPPhoneNo">
+                <input type="text" class="form-control" id="editipPhoneNo" name="editipPhoneNo" placeholder="IPPhoneNo" maxlength="20">
                 <span id="editipPhoneNoError" style="color:red;display:none;font-size:14px;"></span>
 
               </div>
 
               <div class="col-md-3">
                 <label for="editmobion" class="form-label">Mobion</label>
-                <input type="text" class="form-control" id="editmobion" name="editmobion" placeholder="Mobion">
+                <input type="text" class="form-control" id="editmobion" name="editmobion" placeholder="Mobion" maxlength="20">
               </div>
 
               <div class="col-md-3">
                 <label for="editmobiweb" class="form-label">Mobiweb</label>
-                <input type="text" class="form-control" id="editmobiweb" name="editmobiweb" placeholder="Mobiweb">
+                <input type="text" class="form-control" id="editmobiweb" name="editmobiweb" placeholder="Mobiweb" maxlength="20">
               </div>
             </div>
             <!-- Add more fields as needed -->

@@ -144,23 +144,37 @@ $ctbl = tablecheck($con, "ip_setting"); ?>
         $(document).ready(function() {
 
             $("#editLastname").on("input", function() {
-                // Allow only digits and dot
-                let original = this.value;
+                // Remove all invalid characters (anything except digits or dot)
                 this.value = this.value.replace(/[^0-9.]/g, "");
 
+                let original = this.value.trim();
                 let $field = $(this);
                 let id = this.id;
 
-                if (this.value !== original) {
-                    // Show error if any non-numeric or non-dot was removed
-                    $("#" + id + "Error").text("Please enter only numeric values and dot.").show();
+                // IPv4 regex: Matches partial segments for live feedback
+                const ipv4Partial = /^(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)?(\.(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)?){0,3}$/;
+
+                // Full IPv4 regex: Matches a complete valid IPv4 address
+                const ipv4Full = /^(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)){3}$/;
+
+                if (!ipv4Partial.test(original)) {
+                    // Invalid characters or bad structure
+                    $("#" + id + "Error").text("Use only digits and dots.").show();
                     $field.css("border-color", "red");
-                } else {
-                    // Hide error when valid
+                    $("#saveEdit").prop("disabled", true);
+                } else if (ipv4Full.test(original)) {
+                    // Fully valid IPv4 address
                     $("#" + id + "Error").hide();
                     $field.css("border-color", "green");
+                    $("#saveEdit").prop("disabled", false);
+                } else {
+                    // Partial but valid structure (e.g., "192." or "10.0")
+                    $("#" + id + "Error").text("Continue entering a valid IP address.").show();
+                    $field.css("border-color", "orange");
+                    $("#saveEdit").prop("disabled", true);
                 }
             });
+
 
 
 

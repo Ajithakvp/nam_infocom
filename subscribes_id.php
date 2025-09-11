@@ -99,12 +99,12 @@ $ctbl = tablecheck($con, "subscriber");
                     <form id="editForm">
                         <div class="mb-3">
                             <label for="editFirstname" class="form-label">User Name</label>
-                            <input type="text" class="form-control" id="editFirstname">
+                            <input type="text" class="form-control" id="editFirstname" maxlength="50">
 
                         </div>
                         <div class="mb-3">
                             <label for="editLastname" class="form-label">Password</label>
-                            <input type="text" class="form-control" id="editLastname">
+                            <input type="text" class="form-control" id="editLastname" maxlength="50">
                             <span id="lastnameError" style="color:red;display:none;font-size:14px;"></span>
 
                         </div>

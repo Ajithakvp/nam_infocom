@@ -100,7 +100,7 @@ $ctbl = tablecheck($con, "port_setting"); ?>
                         </div>
                         <div class="mb-3">
                             <label for="editLastname" class="form-label">Port Number</label>
-                            <input type="text" class="form-control" id="editLastname">
+                            <input type="text" class="form-control" id="editLastname" minlength="2" maxlength="5">
                             <span id="editLastnameError" style="color:red;display:none;font-size:14px;"></span>
 
                         </div>
@@ -139,25 +139,34 @@ $ctbl = tablecheck($con, "port_setting"); ?>
 
 
             $("#editLastname").on("input", function() {
-                // Allow only digits and dot
                 let original = this.value;
-                // this.value = this.value.replace(/[^0-9.]/g, "");
+                // Remove any non-digit characters
                 this.value = this.value.replace(/[^0-9]/g, "");
-
 
                 let $field = $(this);
                 let id = this.id;
+                let $error = $("#" + id + "Error");
+                let $save = $("#saveEdit");
 
-                if (this.value !== original) {
-                    // Show error if any non-numeric or non-dot was removed
-                    $("#" + id + "Error").text("Please enter only numeric values.").show();
+                // Default: disable save until proven valid
+                $save.prop("disabled", true);
+
+                if (original.length < 2) {
+                    // Too short even before cleaning
+                    $error.text("Please enter minimum 2 digits.").show();
+                    $field.css("border-color", "red");
+                } else if (this.value !== original) {
+                    // Invalid characters removed
+                    $error.text("Please enter only numeric values.").show();
                     $field.css("border-color", "red");
                 } else {
-                    // Hide error when valid
-                    $("#" + id + "Error").hide();
+                    // Valid numeric input (min 2 digits)
+                    $error.hide();
                     $field.css("border-color", "green");
+                    $save.prop("disabled", false); // ✅ Enable Save button
                 }
             });
+
 
 
             // Initialize DataTable

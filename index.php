@@ -195,12 +195,12 @@ include("config.php");
 
     <div class="input-group">
       <i class="fa fa-user left-icon"></i>
-      <input type="text" id="username" placeholder="Username" class="input-box">
+      <input type="text" id="username" placeholder="Username" class="input-box" maxlength="20">
     </div>
 
     <div class="input-group">
       <i class="fa fa-lock left-icon"></i>
-      <input type="password" id="password" placeholder="Password" class="input-box">
+      <input type="password" id="password" placeholder="Password" class="input-box" maxlength="20">
       <i class="fa fa-eye toggle-password" id="togglePassword"></i>
     </div>
 
