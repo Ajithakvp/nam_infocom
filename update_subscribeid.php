@@ -55,8 +55,10 @@ if (isset($_POST['username'], $_POST['passwordstr'])) {
             echo "✅ Updated Successfully !";
         } else {
             echo "❌ Failed to save vars.xml. Run PHP/Apache as Administrator.";
+            logError(pg_last_error($con));
         }
     } else {
         echo "Update failed!";
+        logError(pg_last_error($con));
     }
 }

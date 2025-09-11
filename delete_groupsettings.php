@@ -18,6 +18,7 @@ if ($res) {
 
     if (!file_exists($filePath)) {
         die("❌ File not found: $filePath\n");
+        logError("Query failed: " . pg_last_error($con));
     }
 
     // helper to build XPath literal safely
@@ -69,4 +70,5 @@ if ($res) {
     }
 } else {
     echo "Unable to delete. Please try again !";
+    logError("Query failed: " . pg_last_error($con));
 }

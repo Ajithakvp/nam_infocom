@@ -64,11 +64,14 @@ if (isset($_POST['port_id'], $_POST['portname'], $_POST['portno'])) {
                 echo "Record updated (Port NO: $portno)";
             } else {
                 echo "❌ Failed to save vars.xml (check permissions)";
+                logError(pg_last_error($con));
             }
         } else {
             echo "⚠ $pname not found in vars.xml";
+            logError(pg_last_error($con));
         }
     } else {
         echo "Update failed!";
+        logError(pg_last_error($con));
     }
 }

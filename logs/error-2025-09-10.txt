@@ -1,0 +1,7 @@
+[2025-09-10 20:25:04] PHP Error [8192]: pg_escape_string(): Automatic fetching of PostgreSQL connection is deprecated in C:\xampp\htdocs\nam_infocom\check_table.php on line 9
+[2025-09-10 20:36:19] 
+[2025-09-10 20:40:00] 
+[2025-09-10 20:44:50] SELECT * FROM public.subscriber_profile 
+            WHERE subscriber_id = 'admin'
+              AND subscriber_password = '12345'
+            ORDER BY id ASC

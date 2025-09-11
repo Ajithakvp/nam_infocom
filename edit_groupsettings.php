@@ -62,6 +62,7 @@ if ($res) {
 
     if (!file_exists($filePath)) {
         die("❌ File not found: $filePath\n");
+        logError("File not found: $filePath\n" . pg_last_error($con));
     }
 
     // helper to build XPath literal safely
@@ -86,6 +87,7 @@ if ($res) {
 
     if (!$dom->load($filePath)) {
         die("❌ Failed to load XML file.\n");
+        logError("Failed to load XML file.\n " . pg_last_error($con));
     }
 
     $xpath = new DOMXPath($dom);
@@ -95,6 +97,7 @@ if ($res) {
 
     if ($nodes === false || $nodes->length === 0) {
         die("⚠️ No <extension> found with name \"$groupname\".\n");
+        logError("No <extension> found with name \"$groupname\".\n" . pg_last_error($con));
     }
 
     $removed = 0;
@@ -121,6 +124,7 @@ if ($res) {
                 $xmlContent = file_get_contents($filePath);
                 if ($xmlContent === false) {
                     die("❌ Failed to read file: $filePath");
+                    logError("Failed to read file: $filePath" . pg_last_error($con));
                 }
 
                 // Build new extension block
@@ -145,6 +149,7 @@ XML;
 
                 if ($updatedContent === null) {
                     die("❌ Regex error while inserting extension.");
+                    logError("Regex error while inserting extension." . pg_last_error($con));
                 }
 
                 // Save file back
@@ -152,6 +157,7 @@ XML;
                     echo "success";
                 } else {
                     echo "❌ Failed to save file.";
+                    logError("Failed to save file." . pg_last_error($con));
                 }
             } else if ($conference == "Video" && $callType == "Dial-IN") {
                 // Variables
@@ -176,6 +182,7 @@ XML;
                 $xmlContent = file_get_contents($filePath);
                 if ($xmlContent === false) {
                     die("❌ Failed to read XML file.");
+                    logError("Failed to read XML file." . pg_last_error($con));
                 }
 
                 // Build the new extension block
@@ -206,19 +213,23 @@ XML;
 
                 if ($updatedContent === null) {
                     die("❌ Regex error while inserting extension.");
+                    logError("Regex error while inserting extension." . pg_last_error($con));
                 }
                 if ($updatedContent === $xmlContent) {
                     die("❌ Could not find <extension name=\"unloop\"> in file.");
+                    logError("Could not find <extension name=\"unloop\"> in file." . pg_last_error($con));
                 }
 
                 // Backup old file
                 if (!copy($filePath, $filePath . ".bak")) {
                     die("⚠️ Backup failed, aborting update.");
+                    logError("Backup failed, aborting update." . pg_last_error($con));
                 }
 
                 // Write updated file
                 if (file_put_contents($filePath, $updatedContent) === false) {
                     die("❌ Failed to update XML file. Try running PHP as Administrator.");
+                    logError("Failed to update XML file. Try running PHP as Administrator." . pg_last_error($con));
                 } else {
                     echo "success";
                 }
@@ -248,6 +259,7 @@ XML;
 
                 if (!$dom->load($filePath)) {
                     die("❌ Failed to load XML file: $filePath");
+                    logError("Failed to load XML file" . pg_last_error($con));
                 }
 
                 // Create <extension>
@@ -345,16 +357,21 @@ XML;
                     echo "success";
                 } else {
                     echo "❌ Failed to save file.";
+                    logError(pg_last_error($con));
                 }
             } else {
                 echo "❌ Could not save file.";
+                logError(pg_last_error($con));
             }
         } else {
             echo "❌ Could not save file.";
+            logError(pg_last_error($con));
         }
     } else {
         echo "❌ Could not save file.";
+        logError(pg_last_error($con));
     }
 } else {
     echo "0";
+    logError(pg_last_error($con));
 }

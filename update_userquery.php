@@ -204,11 +204,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 echo "✅ User updated successfully!";
             } else {
                 echo "❌ Failed to create file. Try running PHP as Administrator.";
+                logError(pg_last_error($con));
             }
         } else {
             die("❌ Failed to delete file. Check permissions.\n");
+            logError(pg_last_error($con));
         }
     } else {
         echo "Error: " . pg_last_error($con);
+        logError(pg_last_error($con));
     }
 }

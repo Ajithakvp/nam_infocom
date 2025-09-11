@@ -63,8 +63,10 @@ if (isset($_POST['iptype'], $_POST['ipaddress'], $_POST['ip_id'])) {
             echo "✅ Updated $ipname with IP: $ip_add";
         } else {
             echo "❌ Failed to save XML. Run PHP/Apache as Administrator.";
+            logError(pg_last_error($con));
         }
     } else {
         echo "Update failed!";
+        logError(pg_last_error($con));
     }
 }

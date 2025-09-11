@@ -1,0 +1,9 @@
+; Database Hosting Details
+DB_HOST=localhost
+DB_USER=postgres
+DB_PORT=5432
+DB_PASS=admin
+DB_NAME=nam_info_test
+
+; Error Log Check: use 1 for ON, 0 for OFF
+ERROR_LOG=0

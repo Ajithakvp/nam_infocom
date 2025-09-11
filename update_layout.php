@@ -62,12 +62,15 @@ if (isset($_POST['layout_val'])) {
             }
             if (file_put_contents($filePath, $result) === false) {
                 die("❌ Failed to save XML. Run Apache/PHP with Administrator rights.");
+                logError(pg_last_error($con));
             }
             echo "✅ Update Successfully " . $layout_val;
         } else {
             echo "⚠️ Profile 'video-mcu-stereo' not found in XML.";
+            logError(pg_last_error($con));
         }
     } else {
         echo " ❌ Update failed!";
+        logError(pg_last_error($con));
     }
 }

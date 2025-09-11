@@ -344,7 +344,28 @@ CREATE TABLE public.t_registered (
     if (!tableExists($con, $name)) {
       $create = pg_query($con, $ddl);
       if ($create) {
-        $message = "All Table created successfully.<br>";
+
+
+
+
+        $message = '<div style="
+            border: 1px solid #ccc;
+            border-radius: 12px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin: 20px auto;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        ">
+            <label style="
+                font-size: 16px;
+                color: #333;
+            ">
+               <strong>All Table created successfully.</strong>
+            </label>
+        </div>';
       } else {
         $message =  "Error creating table '$name': " . pg_last_error() . "<br>";
       }
@@ -495,9 +516,13 @@ CREATE TABLE public.t_registered (
   <script src="assets/js/app.min.js"></script>
   <script>
     function dbdownload() {
+
       $.ajax({
         url: 'dbbackup.php', // Your PHP script that does the backup
-        type: 'GET', // or 'POST' if needed
+        type: 'POST', // or 'POST' if needed
+        data: {
+          action: action
+        },
         success: function(response) {
           // Optional: handle response from PHP
           alert("Database backup completed successfully!");

@@ -25,4 +25,5 @@ if ($res && pg_num_rows($res) > 0) {
   echo "success";
 } else {
   echo "0";
+  logError($sql . pg_last_error($con));
 }

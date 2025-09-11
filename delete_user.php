@@ -35,7 +35,9 @@ if (isset($_POST['id'])) {
         }
     } else {
         echo "error";
+        logError("Query failed: " . pg_last_error($con));
     }
 } else {
     echo "error";
+    logError("Query failed: " . pg_last_error($con));
 }

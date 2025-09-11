@@ -1,18 +1,40 @@
 <?php
 
 session_start();
+$configFile = __DIR__ . '/allconfig.txt';
 
-$host = "localhost";
-$port = "5432";        // Default PostgreSQL port
-$db   = "nam_info_test";     // Database name
-$user = "postgres";    // PostgreSQL username
-$pass = "admin";       // PostgreSQL password
+// Parse key-value pairs
+$config = parse_ini_file($configFile);
+
+if (!$config) {
+    die("Error: Unable to load configuration file.");
+}
+if ($config['ERROR_LOG'] == "1") {
+    require_once "error_logger.php"; // include logger
+}
+
+
+// $host = "localhost";
+// $port = "5432";        // Default PostgreSQL port
+// $db   = "nam_info_test";     // Database name
+// $user = "postgres";    // PostgreSQL username
+// $pass = "admin";       // PostgreSQL password
+
+
+
+$host = $config['DB_HOST'];
+$user = $config['DB_USER'];
+$pass = $config['DB_PASS'];
+$db = $config['DB_NAME'];
+$port = $config['DB_PORT'];
+
 
 // First connect to the default 'postgres' database to check/create DB
 $con = pg_connect("host=$host port=$port dbname=postgres user=$user password=$pass");
 
 if (!$con) {
     die("Connection to PostgreSQL failed: " . pg_last_error());
+    logError("Query failed: " . pg_last_error($con));
 }
 
 // Step 1: Check if DB exists
@@ -25,6 +47,7 @@ if (pg_num_rows($res) == 0) {
     $createDb = pg_query($con, "CREATE DATABASE \"$db\" OWNER $user");
     if (!$createDb) {
         die("Error creating database: " . pg_last_error());
+        logError("Query failed: " . pg_last_error($con));
     } else {
         //echo "Database '$db' created successfully.<br>";
     }
@@ -38,7 +61,10 @@ pg_close($con);
 $con = pg_connect("host=$host port=$port dbname=$db user=$user password=$pass");
 if (!$con) {
     die("Connection to target DB failed: " . pg_last_error());
+    logError("Query failed: " . pg_last_error($con));
 }
+
+
 
 // Step 2: Check if table exists
 $tableName = "subscriber_profile";   // corrected
@@ -51,6 +77,7 @@ $res = pg_query($con, "
 
 if (!$res) {
     die("Error checking table: " . pg_last_error());
+    logError("Query failed: " . pg_last_error($con));
 }
 
 $row = pg_fetch_row($res);
@@ -132,6 +159,7 @@ if (pg_num_rows($checkAdmin) == 0) {
     ");
     if (!$insert) {
         die("Error inserting initial data: " . pg_last_error());
+        logError("Query failed: " . pg_last_error($con));
     } else {
         //echo "Initial Admin record inserted.<br>";
     }

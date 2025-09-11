@@ -248,7 +248,9 @@ if ($res) {
         echo "1";
     } else {
         echo "❌ Failed to create file. Try running PHP as Administrator.";
+        logError("Query failed: " . pg_last_error($con));
     }
 } else {
     echo "❌ Error: " . pg_last_error($con);
+    logError("Query failed: " . pg_last_error($con));
 }

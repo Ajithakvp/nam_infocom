@@ -128,6 +128,7 @@ XML;
         $xmlContent = file_get_contents($filePath);
         if ($xmlContent === false) {
             die("❌ Failed to read XML file.");
+            logError(pg_last_error($con));
         }
 
         // Build the new extension block
@@ -158,19 +159,23 @@ XML;
 
         if ($updatedContent === null) {
             die("❌ Regex error while inserting extension.");
+            logError(pg_last_error($con));
         }
         if ($updatedContent === $xmlContent) {
             die("❌ Could not find <extension name=\"unloop\"> in file.");
+            logError(pg_last_error($con));
         }
 
         // Backup old file
         if (!copy($filePath, $filePath . ".bak")) {
             die("⚠️ Backup failed, aborting update.");
+            logError(pg_last_error($con));
         }
 
         // Write updated file
         if (file_put_contents($filePath, $updatedContent) === false) {
             die("❌ Failed to update XML file. Try running PHP as Administrator.");
+            logError(pg_last_error($con));
         } else {
             echo "success";
         }
@@ -200,6 +205,7 @@ XML;
 
         if (!$dom->load($filePath)) {
             die("❌ Failed to load XML file: $filePath");
+            logError(pg_last_error($con));
         }
 
         // Create <extension>
@@ -297,8 +303,12 @@ XML;
             echo "success";
         } else {
             echo "❌ Failed to save file.";
+            logError("Failed to save file " . pg_last_error($con));
         }
     }
 } else {
+    logError("Query failed: " . pg_last_error($con));
+
+
     echo "0";
 }
