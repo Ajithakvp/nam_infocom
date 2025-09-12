@@ -385,7 +385,7 @@ header("Pragma: no-cache");
 
               <div class="col-md-3">
                 <label for="addtimezone" class="form-label">Timezone <span class="text-danger" style="font-size: large;">*</span></label>
-                <input type="text" class="form-control" id="addtimezone" name="addtimezone" placeholder="Timezone" required>
+                <input type="text" class="form-control" id="addtimezone" name="addtimezone" placeholder="Timezone" required readonly>
               </div>
 
               <div class="col-md-3">
@@ -541,7 +541,7 @@ header("Pragma: no-cache");
 
               <div class="col-md-3">
                 <label for="edittimezone" class="form-label">Timezone <span class="text-danger" style="font-size: large;">*</span></label>
-                <input type="text" class="form-control" id="edittimezone" name="edittimezone" placeholder="Timezone" required>
+                <input type="text" class="form-control" id="edittimezone" name="edittimezone" placeholder="Timezone" required readonly>
               </div>
 
               <div class="col-md-3">
