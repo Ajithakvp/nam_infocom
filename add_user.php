@@ -35,50 +35,146 @@ header("Pragma: no-cache");
   <link href="assets/css/dataTables.bootstrap5.min.css" rel="stylesheet">
   <link href="assets/css/responsive.bootstrap5.min.css" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/styles.min.css" />
+
   <style>
-    /* Main select box */
-    .modal-content {
-      border-radius: 12px;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
+    /* -------------------------
+       Modal / layout fixes
+       ------------------------- */
+    /* Allow dropdown to escape modal-body clipping */
+    .modal {
+      overflow: visible !important;
     }
 
-    /* Make Select2 look like Bootstrap form-control */
+    /* Make modal-body scrollable (so dropdown can appear outside the scroll area) */
+    .modal .modal-body {
+      max-height: calc(100vh - 220px);
+      overflow: auto;
+    }
+
+    /* -------------------------
+       Select2 core fixes
+       ------------------------- */
+    .select2-container {
+      width: 100% !important;
+      z-index: 2000 !important;
+      /* above modal */
+    }
+
+    /* ensure dropdown itself sits visually above modal/backdrop */
+    .select2-dropdown {
+      z-index: 3000 !important;
+      position: absolute !important;
+      transform: none !important;
+      /* avoid transform-based offset issues */
+    }
+
+    /* open state: disable extra transforms to keep positioning predictable */
+    .select2-container--open .select2-dropdown {
+      transform: none !important;
+    }
+
+    /* Select box look */
     .select2-container .select2-selection--single {
-      height: 38px;
-      padding: 6px 12px;
-      border: 1px solid #ced4da;
-      border-radius: .375rem;
-    }
-
-    .select2-container--default .select2-selection--single .select2-selection__rendered {
-      line-height: 24px;
-    }
-
-    /* Flag styling */
-    .flag-img {
-      width: 20px;
-      height: 15px;
-      margin-right: 8px;
-      object-fit: cover;
-      border: 1px solid #ccc;
-    }
-
-    .select2-results__option {
-      display: flex;
-      align-items: center;
-    }
-
-    .select2-results__option img {
-      margin-right: 8px;
+      min-height: 42px !important;
+      padding: 6px 12px !important;
+      border-radius: .375rem !important;
+      border: 1px solid #ced4da !important;
+      display: flex !important;
+      align-items: center !important;
+      background: #fff !important;
+      font-size: 14px !important;
+      box-shadow: none !important;
+      width: 100% !important;
     }
 
     .select2-selection__rendered {
       display: flex !important;
+      align-items: center !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      white-space: nowrap !important;
+    }
+
+    .select2-selection__arrow {
+      right: 8px !important;
+    }
+
+    /* Results list */
+    .select2-results__options {
+      max-height: 260px !important;
+      overflow-y: auto !important;
+      -webkit-overflow-scrolling: touch !important;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+
+    .select2-results__option {
+      padding: 8px 12px !important;
+      font-size: 14px !important;
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      display: block !important;
+      cursor: pointer !important;
+    }
+
+    .select2-container--default .select2-results__option--highlighted[aria-selected] {
+      background-color: #0d6efd !important;
+      color: #fff !important;
+    }
+
+    /* Flag + text layout inside each option */
+    .country-option {
+      display: flex;
       align-items: center;
     }
 
+    .flag-img,
     .select2-selection__rendered img {
+      width: 20px;
+      height: 14px;
+      object-fit: cover;
       margin-right: 8px;
+      border: 1px solid #ddd;
+      border-radius: 2px;
+    }
+
+    /* -------------------------
+       Responsive tweaks
+       ------------------------- */
+    @media (max-width: 576px) {
+      .select2-container .select2-selection--single {
+        min-height: 38px !important;
+        font-size: 13px !important;
+        padding: 4px 10px !important;
+      }
+
+      .select2-results__option {
+        font-size: 12px !important;
+        padding: 6px 10px !important;
+      }
+
+      .flag-img {
+        width: 16px;
+        height: 12px;
+        margin-right: 6px;
+      }
+    }
+
+    @media (min-width: 577px) and (max-width: 991px) {
+      .select2-container .select2-selection--single {
+        min-height: 40px !important;
+        font-size: 13px !important;
+      }
+
+      .select2-results__option {
+        font-size: 13px !important;
+      }
+
+      .flag-img {
+        width: 18px;
+        height: 13px;
+      }
     }
   </style>
 </head>
@@ -1106,17 +1202,20 @@ header("Pragma: no-cache");
     }
 
     // Add User Modal
+
+
     $('#addUserModal #addcountry').select2({
       dropdownParent: $('#addUserModal'),
       data: countries.map(c => ({
         id: c.name,
-        text: c.name,
-
+        text: c.name
       })), // load from array
       templateResult: formatCountry,
       templateSelection: formatCountrySelection,
       placeholder: "--Select country--",
+      allowClear: true
     });
+
 
     // Edit User Modal
     $('#editModal #editcountry').select2({
@@ -1210,6 +1309,10 @@ header("Pragma: no-cache");
 
     document.getElementById("saveEdit").addEventListener("click", function() {
       const form = document.getElementById("editForm");
+      if (!form.checkValidity()) {
+        form.reportValidity(); // Show native HTML5 errors
+        return;
+      }
 
       const formData = new FormData(form);
       // Add disabled inputs manually
