@@ -27,6 +27,8 @@ $addmobion          = trim($_POST['addmobion'] ?? null);
 $addmobiweb         = trim($_POST['addmobiweb'] ?? '');
 $addcountrycode     = trim($_POST['addcountrycode'] ?? '');
 
+
+
 // -------------------------
 // DATE CALCULATIONS
 // -------------------------
@@ -58,9 +60,9 @@ $gmtsign = null;
 // Default Flags
 // -------------------------
 $status      = 1;
-$email_sent  = 1;
-$sms_sent    = 1;
-$daylightsaving = 1;
+$email_sent  = 0;
+$sms_sent    = 0;
+$daylightsaving = 0;
 
 $sqlsubscribeidchk = "SELECT * FROM public.subscriber_profile WHERE subscriber_id='$adduserId' ORDER BY id ASC";
 $ressubidchk = pg_query($con, $sqlsubscribeidchk);

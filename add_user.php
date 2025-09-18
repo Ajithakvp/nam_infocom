@@ -366,7 +366,15 @@ header("Pragma: no-cache");
                 </select>
               </div>
 
-              <input type="hidden" id="addcountrycode" />
+              <div class="col-md-3">
+                <label for="addcountrycode" class="form-label">Country Code <span class="text-danger" style="font-size: large;">*</span></label>
+                <input type="text" class="form-control" id="addcountrycode" name="addcountrycode" placeholder="Country Code" maxlength="50" required readonly>
+                <!-- <span id="userIdError" style="color:red;display:none;font-size:14px;"></span> -->
+
+              </div>
+
+              <!-- 
+              <input type="hidden" id="addcountrycode" /> -->
 
               <div class="col-md-3">
                 <label for="adduserId" class="form-label">User ID <span class="text-danger" style="font-size: large;">*</span></label>
@@ -526,7 +534,14 @@ header("Pragma: no-cache");
                   <option value="">--Select country--</option>
                 </select>
               </div>
-              <input type="hidden" id="editcountrycode" />
+
+              <div class="col-md-3">
+                <label for="editcountrycode" class="form-label">Country Code <span class="text-danger" style="font-size: large;">*</span></label>
+                <input type="text" class="form-control" id="editcountrycode" name="editcountrycode" placeholder="Country Code" maxlength="50" required readonly>
+                <!-- <span id="userIdError" style="color:red;display:none;font-size:14px;"></span> -->
+
+              </div>
+              <!-- <input type="hidden" id="editcountrycode" /> -->
 
               <div class="col-md-3">
                 <label for="edituserId" class="form-label">User ID <span class="text-danger" style="font-size: large;">*</span></label>
@@ -859,6 +874,9 @@ header("Pragma: no-cache");
         }
 
         let formData = $("#addUserForm").serialize();
+
+        console.log(...formData); // Debug
+
 
         $.ajax({
           url: "add_userquery.php",
@@ -1319,6 +1337,8 @@ header("Pragma: no-cache");
       $("#editForm :input:disabled[name]").each(function() {
         formData.append(this.name, $(this).val());
       });
+
+      console.log(...formData); // Debug
 
       fetch("update_userquery.php", {
           method: "POST",

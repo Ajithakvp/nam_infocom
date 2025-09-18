@@ -26,6 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $ipphone = $_POST['editipPhoneNo'];
     $mobion = $_POST['editmobion'];
     $mobiweb = $_POST['editmobiweb'];
+    $editcountrycode = $_POST['editcountrycode'];
 
 
     // Function to check if a number already exists in the database
@@ -79,8 +80,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               first_name=$1,last_name=$2,email=$3,mobile_no=$4,country=$5,
               subscriber_id=$6,subscriber_password=$7,timezone=$8,groupid=$9,pbx=$10,
               company_name=$11,designation=$12,addr_1=$13,city=$14,state=$15,area_code=$16,
-              res_no=$17,profile=$18,ipphoneno=$19,mobion=$20,mobiweb=$21, extension_no=$22
-            WHERE id=$23";
+              res_no=$17,profile=$18,ipphoneno=$19,mobion=$20,mobiweb=$21, extension_no=$22,country_code=$23
+            WHERE id=$24";
 
     $params = [
         $first,
@@ -105,6 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $mobion,
         $mobiweb,
         $extension,
+        $editcountrycode,
         $id
     ];
 
