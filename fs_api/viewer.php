@@ -5,6 +5,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>API Viewer</title>
+  <link rel="shortcut icon" type="image/png" href="../assets/images/logos/favicon.png" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
   <style>
@@ -234,80 +235,91 @@
   <!-- Include APIs -->
   <script src="apis.js"></script>
   <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const apiName = urlParams.get("api") || "Fetch Add User";
-    const api = apis.find(a => a.name === apiName);
+    document.addEventListener('apisReady', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const apiName = urlParams.get("api") || "Fetch Add User";
+      const api = window.apis.find(a => a.name === apiName);
 
-    document.getElementById("apiTitle").textContent = apiName;
-    document.getElementById("apiDesc").textContent = api.desc;
+      if (!api) {
+        document.getElementById("apiTitle").textContent = "API Not Found";
+        document.getElementById("apiDesc").textContent = `No API found for "${apiName}"`;
+        return;
+      }
 
-    const form = document.getElementById("apiForm");
-    form.innerHTML = "";
-    if (api.params) {
-      api.params.forEach(p => {
-        const row = document.createElement("div");
-        row.className = "param-row";
-        row.innerHTML = `
-          <label for="${p}">
-            ${p} <span class="type">string</span>
-          </label>
+      document.getElementById("apiTitle").textContent = apiName;
+      document.getElementById("apiDesc").textContent = api.desc;
+
+      const form = document.getElementById("apiForm");
+      form.innerHTML = "";
+      if (api.params?.length) {
+        api.params.forEach(p => {
+          const row = document.createElement("div");
+          row.className = "param-row";
+          row.innerHTML = `
+          <label for="${p}">${p} <span class="type">string</span></label>
           <input type="text" id="${p}" placeholder="Enter ${p}">
         `;
-        form.appendChild(row);
-      });
-    } else {
-      form.innerHTML = "<p>No parameters required for this API.</p>";
-    }
-
-    function syntaxHighlight(json) {
-      if (typeof json !== 'string') json = JSON.stringify(json, null, 2);
-      json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-      return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|\b-?\d+(\.\d+)?([eE][+\-]?\d+)?\b)/g, match => {
-        let cls = 'json-number';
-        if (/^"/.test(match)) cls = /:$/.test(match) ? 'json-key' : 'json-string';
-        else if (/true|false/.test(match)) cls = 'json-boolean';
-        else if (/null/.test(match)) cls = 'json-null';
-        return `<span class="${cls}">${match}</span>`;
-      });
-    }
-
-    function collectData() {
-      const obj = {};
-      if (api.params) api.params.forEach(p => obj[p] = document.getElementById(p).value);
-      return obj;
-    }
-
-    document.getElementById("previewBtn").onclick = e => {
-      e.preventDefault();
-      const preview = {
-        method: api.method,
-        url: api.url,
-        params: collectData()
-      };
-      document.getElementById("responseBox").innerHTML = "📤 Request Preview:\n" + syntaxHighlight(preview);
-    };
-
-    document.getElementById("sendBtn").onclick = async e => {
-      e.preventDefault();
-      document.getElementById("responseBox").textContent = "⏳ Sending...";
-      try {
-        let response;
-        if (api.method === "GET") {
-          response = await fetch(api.url);
-        } else {
-          const body = new URLSearchParams();
-          api.params.forEach(p => body.append(p, document.getElementById(p).value));
-          response = await fetch(api.url, {
-            method: "POST",
-            body
-          });
-        }
-        const json = await response.json();
-        document.getElementById("responseBox").innerHTML = syntaxHighlight(json);
-      } catch (err) {
-        document.getElementById("responseBox").textContent = "❌ Error: " + err.message;
+          form.appendChild(row);
+        });
+      } else {
+        form.innerHTML = "<p>No parameters required for this API.</p>";
       }
-    };
+
+      /** Format & highlight JSON nicely */
+      function syntaxHighlight(json) {
+        if (typeof json !== 'string') json = JSON.stringify(json, null, 2);
+        json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|\b-?\d+(\.\d+)?([eE][+\-]?\d+)?\b)/g, match => {
+          let cls = 'json-number';
+          if (/^"/.test(match)) cls = /:$/.test(match) ? 'json-key' : 'json-string';
+          else if (/true|false/.test(match)) cls = 'json-boolean';
+          else if (/null/.test(match)) cls = 'json-null';
+          return `<span class="${cls}">${match}</span>`;
+        });
+      }
+
+
+      function collectData() {
+        const obj = {};
+        api.params?.forEach(p => {
+          obj[p] = document.getElementById(p)?.value.trim() || "";
+        });
+        return obj;
+      }
+
+      /** Preview Request */
+      document.getElementById("previewBtn").onclick = e => {
+        e.preventDefault();
+        const preview = {
+          method: api.method,
+          url: api.url,
+          params: collectData()
+        };
+        document.getElementById("responseBox").innerHTML = "📤 Request Preview:\n" + syntaxHighlight(preview);
+      };
+
+      document.getElementById("sendBtn").onclick = async e => {
+        e.preventDefault();
+        document.getElementById("responseBox").textContent = "⏳ Sending...";
+        try {
+          let response;
+          if (api.method === "GET") {
+            response = await fetch(api.url);
+          } else {
+            const body = new URLSearchParams();
+            api.params.forEach(p => body.append(p, document.getElementById(p).value));
+            response = await fetch(api.url, {
+              method: "POST",
+              body
+            });
+          }
+          const json = await response.json();
+          document.getElementById("responseBox").innerHTML = syntaxHighlight(json);
+        } catch (err) {
+          document.getElementById("responseBox").textContent = "❌ Error: " + err.message;
+        }
+      };
+    });
   </script>
 </body>
 

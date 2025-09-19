@@ -57,7 +57,7 @@ include("chksession.php");
             </div>
             <div class="col-auto">
               <label for="editMobno" class="form-label">Mobile No</label>
-              <input type="text" class="form-control" id="editMobno" placeholder="Enter Mobile Number">
+              <input type="number" class="form-control" id="editMobno" placeholder="Enter Mobile Number">
             </div>
             <div class="col-auto">
               <label for="reportTypeid" class="form-label">Report Type</label>
@@ -122,10 +122,43 @@ include("chksession.php");
 
   <script>
     $(function() {
-      $("#editStartdate, #editEnddate").datepicker({
+      var today = new Date();
+
+      // Start Date
+      $("#editStartdate").datepicker({
         dateFormat: "yy-mm-dd",
         changeMonth: true,
-        changeYear: true
+        changeYear: true,
+        maxDate: today, // cannot pick past date
+        onSelect: function(selectedDate) {
+          var startDate = $(this).datepicker("getDate");
+          var endDate = $("#editEnddate").datepicker("getDate");
+
+          // set minDate of enddate based on startdate
+          // $("#editEnddate").datepicker("option", "maxDate", startDate);
+
+          if (endDate && endDate < startDate) {
+            alert("End date cannot be earlier than Start date.");
+            $("#editEnddate").val(""); // clear wrong value
+          }
+        }
+      });
+
+      // End Date
+      $("#editEnddate").datepicker({
+        dateFormat: "yy-mm-dd",
+        changeMonth: true,
+        changeYear: true,
+        maxDate: today, // cannot pick past date
+        onSelect: function(selectedDate) {
+          var startDate = $("#editStartdate").datepicker("getDate");
+          var endDate = $(this).datepicker("getDate");
+
+          if (startDate && endDate < startDate) {
+            alert("End date cannot be earlier than Start date.");
+            $(this).val(""); // clear wrong value
+          }
+        }
       });
     });
 

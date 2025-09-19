@@ -19,3 +19,7 @@ GRP_SETTING_PATH=C:/Program Files/FreeSWITCH/conf/dialplan/default.xml
 ;Database Backup Folder
 DB_BACKUP_PATH=db_backup
 
+;API URL
+
+API_URL=http://localhost/nam_infocom/fs_api/
+

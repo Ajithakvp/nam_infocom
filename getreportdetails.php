@@ -8,7 +8,7 @@ $report_type = $_REQUEST['report_type'];
 $call_type = $_REQUEST['call_type'];
 
 if ($start_date != "") {
-    $datechk = " AND call_connected_time BETWEEN '" . $start_date . "' AND '" . $end_date . "'";
+    $datechk = " AND call_connected_time::date BETWEEN '" . $start_date . "' AND '" . $end_date . "'";
 } else {
     $datechk = "";
 }
@@ -50,7 +50,7 @@ if ($report_type == "1") {
             </thead>
             <tbody>
                 <?php
-                $sql = "SELECT 
+                 $sql = "SELECT 
                 *,
                 CASE calltype
                 WHEN '1' THEN 'Audio'

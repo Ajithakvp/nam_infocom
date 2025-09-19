@@ -5,6 +5,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Web Service</title>
+    <link rel="shortcut icon" type="image/png" href="../assets/images/logos/favicon.png" />
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -308,65 +310,67 @@
         <div class="grid" id="grid"></div>
     </main>
 
-    <script src="apis.js"></script>
-    <script>
-        let currentMethod = "ALL";
+   <script src="apis.js"></script>
+<script>
+  let currentMethod = "ALL";
 
-        function renderGrid(list) {
-            const grid = document.getElementById('grid');
-            const info = document.getElementById('filterInfo');
-            grid.innerHTML = "";
-            list.forEach(api => {
-                const card = document.createElement('div');
-                card.className = 'card';
-                let paramsHTML = '';
-                if (api.params && api.params.length > 0) {
-                    paramsHTML = '<p><strong>Params:</strong> ' + api.params.join(', ') + '</p>';
-                }
-                card.innerHTML = `
-          <h3>${api.name}</h3>
-          <p>${api.desc}</p>
-          <div class="badge ${api.method}">${api.method}</div>
-          <div class="actions">
-            <button class="btn primary" onclick="openAPI('${api.name}')">Open</button>
-            <button class="btn secondary" onclick="copyURL('${api.url}')">Copy URL</button>
-          </div>
-        `;
-                grid.appendChild(card);
-            });
-            info.textContent = `Showing ${list.length} endpoints`;
-        }
+  function renderGrid(list) {
+    const grid = document.getElementById('grid');
+    const info = document.getElementById('filterInfo');
+    grid.innerHTML = "";
+    list.forEach(api => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      let paramsHTML = api.params?.length 
+        ? `<p><strong>Params:</strong> ${api.params.join(', ')}</p>` 
+        : '';
+      card.innerHTML = `
+        <h3>${api.name}</h3>
+        <p>${api.desc}</p>
+        <div class="badge ${api.method}">${api.method}</div>
+        <div class="actions">
+          <button class="btn primary" onclick="openAPI('${api.name}')">Open</button>
+          <button class="btn secondary" onclick="copyURL('${api.url}')">Copy URL</button>
+        </div>`;
+      grid.appendChild(card);
+    });
+    info.textContent = `Showing ${list.length} endpoints`;
+  }
 
-        function openAPI(name) {
-            window.location.href = `viewer.php?api=${encodeURIComponent(name)}`;
-        }
+  function openAPI(name) {
+    window.location.href = `viewer.php?api=${encodeURIComponent(name)}`;
+  }
 
-        function copyURL(url) {
-            navigator.clipboard.writeText(url);
-            alert("Copied URL!");
-        }
+  function copyURL(url) {
+    navigator.clipboard.writeText(url);
+    alert("Copied URL!");
+  }
 
-        function loadAPIs() {
-            const q = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = apis.filter(api => {
-                return (currentMethod === "ALL" || api.method === currentMethod) &&
-                    (api.name.toLowerCase().includes(q) || api.desc.toLowerCase().includes(q));
-            });
-            renderGrid(filtered);
-        }
+  function loadAPIs() {
+    const q = document.getElementById('searchInput').value.toLowerCase();
+    const filtered = apis.filter(api =>
+      (currentMethod === "ALL" || api.method === currentMethod) &&
+      (api.name.toLowerCase().includes(q) || api.desc.toLowerCase().includes(q))
+    );
+    renderGrid(filtered);
+  }
 
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                currentMethod = btn.dataset.method;
-                loadAPIs();
-            });
-        });
+  // Filters
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentMethod = btn.dataset.method;
+      loadAPIs();
+    });
+  });
 
-        document.getElementById('searchInput').addEventListener('input', loadAPIs);
-        loadAPIs();
-    </script>
+  document.getElementById('searchInput').addEventListener('input', loadAPIs);
+
+  // Wait for apis.js to finish loading API definitions
+  document.addEventListener('apisReady', loadAPIs);
+</script>
+
 </body>
 
 </html>
