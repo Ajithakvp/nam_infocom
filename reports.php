@@ -13,6 +13,9 @@ include("chksession.php");
   <!-- Bootstrap 5 CSS -->
   <link href="assets/css/bootstrap.min.css" rel="stylesheet">
 
+  <link rel="stylesheet" href="assets/css/jquery-ui-timepicker-addon.min.css">
+
+
   <!-- DataTables CSS -->
   <link href="assets/css/dataTables.bootstrap5.min.css" rel="stylesheet">
   <link href="assets/css/responsive.bootstrap5.min.css" rel="stylesheet">
@@ -62,7 +65,6 @@ include("chksession.php");
             <div class="col-auto">
               <label for="reportTypeid" class="form-label">Report Type</label>
               <select id="reportTypeid" class="form-control">
-                <option value="">Select Report Type</option>
                 <option value="1">Call Details</option>
                 <option value="2">PBX</option>
                 <option value="3">MobiWeb</option>
@@ -106,6 +108,8 @@ include("chksession.php");
   <script src="assets/js/sidebarmenu.js"></script>
   <script src="assets/js/app.min.js"></script>
 
+  <script src="assets/js/jquery-ui-timepicker-addon.min.js"></script>
+
 
   <!-- DataTables JS -->
   <script src="assets/js/jquery.dataTables.min.js"></script>
@@ -124,43 +128,56 @@ include("chksession.php");
     $(function() {
       var today = new Date();
 
-      // Start Date
-      $("#editStartdate").datepicker({
+      // Start of day (00:00:00) and End of day (23:59:59)
+      var startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0);
+      var endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59);
+
+      // Common settings
+      var options = {
         dateFormat: "yy-mm-dd",
+        timeFormat: "HH:mm:ss",
         changeMonth: true,
         changeYear: true,
-        maxDate: today, // cannot pick past date
-        onSelect: function(selectedDate) {
-          var startDate = $(this).datepicker("getDate");
-          var endDate = $("#editEnddate").datepicker("getDate");
+        maxDate: today
+      };
 
-          // set minDate of enddate based on startdate
-          // $("#editEnddate").datepicker("option", "maxDate", startDate);
-
-          if (endDate && endDate < startDate) {
-            alert("End date cannot be earlier than Start date.");
-            $("#editEnddate").val(""); // clear wrong value
+      // Start DateTime
+      $("#editStartdate").datetimepicker($.extend({}, options, {
+        onClose: function(selectedDate) {
+          var startDate = $(this).datetimepicker("getDate");
+          if (startDate) {
+            startDate.setHours(0, 0, 0, 0); // 00:00:00
+            $(this).datetimepicker("setDate", startDate);
+            $("#editEnddate").datetimepicker("option", "minDate", startDate);
           }
         }
-      });
+      })).datetimepicker("setDate", startOfDay);
 
-      // End Date
-      $("#editEnddate").datepicker({
-        dateFormat: "yy-mm-dd",
-        changeMonth: true,
-        changeYear: true,
-        maxDate: today, // cannot pick past date
-        onSelect: function(selectedDate) {
-          var startDate = $("#editStartdate").datepicker("getDate");
-          var endDate = $(this).datepicker("getDate");
+      // End DateTime
+      $("#editEnddate").datetimepicker($.extend({}, options, {
+        onClose: function(selectedDate) {
+          var startDate = $("#editStartdate").datetimepicker("getDate");
+          var endDate = $(this).datetimepicker("getDate");
 
-          if (startDate && endDate < startDate) {
+          if (endDate) {
+            // Set time to 23:59:59
+            endDate.setHours(23, 59, 59, 0);
+
+            // Use setTimeout to avoid overriding by picker
+            var self = $(this);
+            setTimeout(function() {
+              self.datetimepicker("setDate", endDate);
+            }, 1);
+          }
+
+          if (startDate && endDate && endDate < startDate) {
             alert("End date cannot be earlier than Start date.");
-            $(this).val(""); // clear wrong value
+            $(this).val("");
           }
         }
-      });
+      })).datetimepicker("setDate", endOfDay);
     });
+
 
     let table = null;
 
@@ -174,6 +191,9 @@ include("chksession.php");
       toggleCallType();
       $("#reportTypeid").change(toggleCallType);
 
+      // declare table in outer scope
+      let table;
+
       // fetch and render table
       $("#submitBtn").on("click", function() {
         const startDate = $("#editStartdate").val();
@@ -182,56 +202,92 @@ include("chksession.php");
         const reportType = $("#reportTypeid").val();
         const callType = $("#callTypeid").val();
 
-        if (reportType == "") {
+        if (reportType === "") {
           alert("Please Select Report Type...");
           return;
         }
 
+        if (startDate === "" || endDate === "") {
+          alert("Please select both Start Date and End Date.");
+          return;
+        }
+
+        if (new Date(startDate) > new Date(endDate)) {
+          alert("Start Date cannot be later than End Date.");
+          return;
+        }
+
+        let title = "";
+        if (reportType === "1") {
+          title =
+            "Call Details Report" +
+            (mobileNo ? " for " + mobileNo : "") +
+            " from " +
+            startDate +
+            " to " +
+            endDate + " Call Type : " + (callType ? $("#callTypeid option:selected").text() : "ALL");
+        } else if (reportType === "2") {
+          title =
+            "PBX Report" +
+            (mobileNo ? " for " + mobileNo : "") +
+            " from " +
+            startDate +
+            " to " +
+            endDate + " Call Type : " + (callType ? $("#callTypeid option:selected").text() : "ALL");
+        } else if (reportType === "3") {
+          title =
+            "MobiWeb Report" +
+            (mobileNo ? " for " + mobileNo : "") +
+            " from " +
+            startDate +
+            " to " +
+            endDate + " Call Type : " + (callType ? $("#callTypeid option:selected").text() : "ALL");
+        }
+
         $.ajax({
-          url: 'getreportdetails.php',
-          type: 'POST',
+          url: "getreportdetails.php",
+          type: "POST",
           data: {
             start_date: startDate,
             end_date: endDate,
             mobile_no: mobileNo,
             report_type: reportType,
-            call_type: callType
+            call_type: callType,
           },
           success: function(html) {
             // server MUST return a table with id="example" and full <thead> of all columns
             $("#report_details").html(html);
 
             // destroy if initialized
-            if ($.fn.DataTable.isDataTable('#example')) {
-              $('#example').DataTable().destroy();
-              $('#example').empty(); // optional: ensure clean
-              // re-insert returned HTML: already done by server
+            if ($.fn.DataTable.isDataTable("#example")) {
+              $("#example").DataTable().destroy();
+              $("#example").empty(); // optional: ensure clean
             }
 
             // Initialize DataTable and ensure _all_ columns are exported
-            table = $('#example').DataTable({
+            table = $("#example").DataTable({
               destroy: true,
               responsive: true,
               pageLength: 10,
               lengthMenu: [5, 10, 25, 50],
-              dom: 'Bfrtip',
+              dom: "Bfrtip",
               buttons: [{
-                  extend: 'print',
-                  title: 'Report',
-                  messageTop: 'Generated on: ' + new Date().toLocaleString(),
+                  extend: "print",
+                  title: "Report",
+                  messageTop: "Generated on: " + new Date().toLocaleString(),
                   exportOptions: {
                     columns: function(idx, data, node) {
                       return true; // ✅ ensures all columns (visible + hidden) are exported
-                    }
-                  }
+                    },
+                  },
                 },
                 {
-                  extend: 'excelHtml5',
-                  title: 'Report',
+                  extend: "excelHtml5",
+                  title: title,
                   exportOptions: {
                     columns: function(idx, data, node) {
                       return true; // ✅ ensures all columns are exported
-                    }
+                    },
                   },
                   action: function(e, dt, button, config) {
                     if (dt.data().count() === 0) {
@@ -240,41 +296,42 @@ include("chksession.php");
                     }
 
                     // ✅ Call the original action if data exists
-                    $.fn.dataTable.ext.buttons.excelHtml5.action.call(this, e, dt, button, config);
-                  }
-
-                }
-              ]
+                    $.fn.dataTable.ext.buttons.excelHtml5.action.call(
+                      this,
+                      e,
+                      dt,
+                      button,
+                      config
+                    );
+                  },
+                },
+              ],
             });
-
 
             // Hide default Buttons UI if you prefer only custom triggers:
             table.buttons().container().hide();
           },
           error: function(xhr, status, error) {
             alert("Error: " + error);
-          }
+          },
         });
       });
 
-      // custom triggers:
-      $(document).on('click', '#customPrint', function() {
-        if (table) table.button('.buttons-print').trigger();
-        else alert('Please load report first (click Submit).');
+      // custom triggers
+      $(document).on("click", "#customPrint", function() {
+        if (table) table.button(".buttons-print").trigger();
+        else alert("Please load report first (click Submit).");
       });
-      $(document).on('click', '#customExcel', function() {
-        if (table) table.button('.buttons-excel').trigger();
-        else alert('Please load report first (click Submit).');
+
+      $(document).on("click", "#customExcel", function() {
+        if (table) table.button(".buttons-excel").trigger();
+        else alert("Please load report first (click Submit).");
       });
+
 
       // reset:
       $("#resetBtn").on('click', function() {
-        $("#editStartdate,#editEnddate,#editMobno,#reportTypeid,#callTypeid").val('');
-        $("#report_details").html('');
-        if (table) {
-          table.destroy();
-          table = null;
-        }
+        location.reload();
       });
     });
   </script>
