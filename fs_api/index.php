@@ -7,6 +7,8 @@
     <title>Web Service</title>
     <link rel="shortcut icon" type="image/png" href="../assets/images/logos/favicon.png" />
 
+    <!-- Bootstrap 5 CSS -->
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -276,6 +278,80 @@
                 font-size: 28px;
             }
         }
+
+
+
+        /* ===== Custom Modal ===== */
+        .custom-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 1050;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .custom-modal {
+            background: rgba(15, 23, 36, 0.95);
+            border-radius: 12px;
+            max-width: 400px;
+            width: 90%;
+            padding: 20px;
+            color: #fff;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .custom-modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #5d87ff, #3a4ed5);
+            padding: 10px 15px;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .custom-modal-header h5 {
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .custom-modal-body {
+            padding: 15px;
+            text-align: center;
+        }
+
+        .custom-modal-footer {
+            display: flex;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
 
@@ -288,6 +364,17 @@
         <div class="header-text">
             <h1> Web Service API</h1>
             <p>Discover and test your service endpoints — dynamic & developer-friendly.</p>
+        </div>
+        <div style="text-align: right; flex-grow: 1; display: flex; justify-content: flex-end; align-items: center;">
+            <button style=" padding: 8px 20px;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            background: linear-gradient(90deg, #ffd54a, #ff9a76);
+            color: #222;
+            transition: all 0.3s;" onclick="openModal();">INFO</button>
         </div>
     </header>
 
@@ -310,21 +397,45 @@
         <div class="grid" id="grid"></div>
     </main>
 
-   <script src="apis.js"></script>
-<script>
-  let currentMethod = "ALL";
+    <div id="aboutModal" class="custom-modal-overlay">
+        <div class="custom-modal">
+            <div class="custom-modal-header">
+                <h5><i class="bi bi-info-circle text-warning me-2"></i> Version <span
+                        class="badge bg-light text-primary ms-1" style=" border-radius: 50px; background: white;color:#4db6ff">Latest</span></h5>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="custom-modal-body">
+                <h6 class="fw-semibold mb-2">Web Service</h6>
+                <p>Application UI <span class="fw-bold">v1.0.2</span></p>
+                <small>Released on <span class="fw-semibold">Sep 22, 2025</span></small>
+            </div>
+            <div class="custom-modal-footer">
+                <button class="btn btn-custom btn-sm" onclick="closeModal()">Close</button>
+            </div>
+        </div>
+    </div>
 
-  function renderGrid(list) {
-    const grid = document.getElementById('grid');
-    const info = document.getElementById('filterInfo');
-    grid.innerHTML = "";
-    list.forEach(api => {
-      const card = document.createElement('div');
-      card.className = 'card';
-      let paramsHTML = api.params?.length 
-        ? `<p><strong>Params:</strong> ${api.params.join(', ')}</p>` 
-        : '';
-      card.innerHTML = `
+    <script src="apis.js"></script>
+
+    <!-- Core JS (order matters) -->
+    <script src="../assets/js/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap JS -->
+
+
+    <script>
+        let currentMethod = "ALL";
+
+        function renderGrid(list) {
+            const grid = document.getElementById('grid');
+            const info = document.getElementById('filterInfo');
+            grid.innerHTML = "";
+            list.forEach(api => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                let paramsHTML = api.params?.length ?
+                    `<p><strong>Params:</strong> ${api.params.join(', ')}</p>` :
+                    '';
+                card.innerHTML = `
         <h3>${api.name}</h3>
         <p>${api.desc}</p>
         <div class="badge ${api.method}">${api.method}</div>
@@ -332,44 +443,63 @@
           <button class="btn primary" onclick="openAPI('${api.name}')">Open</button>
           <button class="btn secondary" onclick="copyURL('${api.url}')">Copy URL</button>
         </div>`;
-      grid.appendChild(card);
-    });
-    info.textContent = `Showing ${list.length} endpoints`;
-  }
+                grid.appendChild(card);
+            });
+            info.textContent = `Showing ${list.length} endpoints`;
+        }
 
-  function openAPI(name) {
-    window.location.href = `viewer.php?api=${encodeURIComponent(name)}`;
-  }
+        function openAPI(name) {
+            window.location.href = `viewer.php?api=${encodeURIComponent(name)}`;
+        }
 
-  function copyURL(url) {
-    navigator.clipboard.writeText(url);
-    alert("Copied URL!");
-  }
+        function copyURL(url) {
+            navigator.clipboard.writeText(url);
+            alert("Copied URL!");
+        }
 
-  function loadAPIs() {
-    const q = document.getElementById('searchInput').value.toLowerCase();
-    const filtered = apis.filter(api =>
-      (currentMethod === "ALL" || api.method === currentMethod) &&
-      (api.name.toLowerCase().includes(q) || api.desc.toLowerCase().includes(q))
-    );
-    renderGrid(filtered);
-  }
+        function loadAPIs() {
+            const q = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = apis.filter(api =>
+                (currentMethod === "ALL" || api.method === currentMethod) &&
+                (api.name.toLowerCase().includes(q) || api.desc.toLowerCase().includes(q))
+            );
+            renderGrid(filtered);
+        }
 
-  // Filters
-  document.querySelectorAll('.filter-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      currentMethod = btn.dataset.method;
-      loadAPIs();
-    });
-  });
+        // Filters
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentMethod = btn.dataset.method;
+                loadAPIs();
+            });
+        });
 
-  document.getElementById('searchInput').addEventListener('input', loadAPIs);
+        document.getElementById('searchInput').addEventListener('input', loadAPIs);
 
-  // Wait for apis.js to finish loading API definitions
-  document.addEventListener('apisReady', loadAPIs);
-</script>
+        // Wait for apis.js to finish loading API definitions
+        document.addEventListener('apisReady', loadAPIs);
+    </script>
+
+
+    <script>
+        function openModal() {
+            document.getElementById("aboutModal").style.display = "flex";
+        }
+
+        function closeModal() {
+            document.getElementById("aboutModal").style.display = "none";
+        }
+
+        // Close when clicking outside modal
+        window.onclick = function(event) {
+            const modal = document.getElementById("aboutModal");
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+    </script>
 
 </body>
 
