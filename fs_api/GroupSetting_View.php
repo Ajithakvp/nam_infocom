@@ -3,6 +3,11 @@ require_once('../config.php');
 $number = $_REQUEST['Number'];
 $escaped = pg_escape_string($con, $number);
 
+if (empty($number)) {
+    echo json_encode(array("status" => "error", "message" => "Number parameter is required"));
+    exit;
+}
+
 $sql = "SELECT * 
         FROM public.group_setting 
         WHERE user_details LIKE '%$escaped%' 

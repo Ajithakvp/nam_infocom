@@ -374,7 +374,7 @@
             font-weight: 600;
             background: linear-gradient(90deg, #ffd54a, #ff9a76);
             color: #222;
-            transition: all 0.3s;" onclick="openModal();">INFO</button>
+            transition: all 0.3s;" onclick="openModal();"> ⓘ Version</button>
         </div>
     </header>
 
